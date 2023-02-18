@@ -27,8 +27,9 @@ public class Arm implements Runnable{
     static MotorControllerGroup seatMotors = new MotorControllerGroup(leftSeatMotor, rightSeatMotor);
    // static TalonSRX armMotor1 = new TalonSRX(Drive.motorPorts[0]);
    // static TalonSRX armMotor2 = new TalonSRX(Drive.motorPorts[1]);
-    static Encoder encoder = new Encoder(2, 3);
-   
+   // static Encoder encoder = new Encoder(2, 3);
+    public static Encoder Sencoder = new Encoder(2,3);
+    
     
         /* Jio note! Hey hey hey! I did a lot of work on encoders so please read ALL of it!
          
@@ -67,13 +68,13 @@ public class Arm implements Runnable{
     double kP = 1;
     double kI = 1;
     double kD = 1;
-    double armPos = 0;
+    double armPos = 0;  
 
     PIDController pidSystem = new PIDController(kP, kI, kD);
 
     public void run(){
 
-        encoder.setDistancePerPulse(4);
+        Sencoder.setDistancePerPulse(4);
         (((IMotorController) seatMotors) ).setNeutralMode(NeutralMode.Brake);
     while(loop){
 
@@ -88,6 +89,7 @@ public class Arm implements Runnable{
             leftSeatMotor.set(-0.9);
 
             rightSeatMotor.set(0.9);
+            //needed safety position needed useing armPos to prevent floor damage and/or robot damage 
   }
     }
        }
@@ -105,7 +107,7 @@ public class Arm implements Runnable{
                 while(Robot.controller0.getRawButton(1)){
 
                 }
-                encoder.reset();
+                Sencoder.reset();
             }
             
             //armMotor.set
