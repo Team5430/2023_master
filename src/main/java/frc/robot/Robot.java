@@ -36,6 +36,8 @@ VariableSpeed safety = new VariableSpeed();
 Arm armRef = new Arm();
 public Thread arm = new Thread(armRef);
 private Thread speedSafety = new Thread(safety);
+Camera cameraRef = new Camera();
+public Thread camera = new Thread(cameraRef);
 private static final String kDefaultAuto = "Default";
 private static final String kCustomAuto = "My Auto";
 private static final String kNormalAuto = "Normal Auto";
@@ -57,7 +59,15 @@ private final SendableChooser<String> m_chooser = new SendableChooser<>();
    */
   @Override
   public void robotInit() {
-    
+    //Thread starters 
+    drive.start();
+    speedSafety.start();
+    arm.start();
+    camera.start();
+
+    //Puts auto list onto Shuffleboard
+    SmartDashboard.putData("Auton Choice",m_chooser);
+
   }
 
   @Override
@@ -80,17 +90,10 @@ private final SendableChooser<String> m_chooser = new SendableChooser<>();
   }
 
   @Override
-  public void teleopInit() {
-    drive.start();
-    speedSafety.start();
-    arm.start();
-
-  }
+  public void teleopInit() {}
 
   @Override
-  public void teleopPeriodic() {
-  
-                  }
+  public void teleopPeriodic() {}
 
   @Override
   public void disabledInit() {}
