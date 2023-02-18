@@ -71,23 +71,23 @@ public class Camera implements Runnable{
                         }  
                           } 
                             }
-    if(joystickButton(5)){
-      while (joystickButton(5)){
-                //button #5 is the right bumber on the Logitech F310(aka RB)
-       switch(toggle_pipeline){
-            case 1:
-                 //changes pipeline to pipline #1, up to #3 and it goes back to 1.
-                 camera.setPipelineIndex(1);
-                    toggle_pipeline = 2;
-                        break;
-            case 2:
-                 camera.setPipelineIndex(2);
-                    toggle_pipeline = 3;
-                        break;
-            case 3: 
-                 camera.setPipelineIndex(3);
-                    toggle_pipeline = 1;
-                        break;
+                if(joystickButton(5)){
+                 while (joystickButton(5)){
+                           //button #5 is the right bumber on the Logitech F310(aka RB)
+                 switch(toggle_pipeline){
+                     case 1:
+                        //changes pipeline to pipline #1, up to #3 and it goes back to 1.
+                            camera.setPipelineIndex(1);
+                             toggle_pipeline = 2;
+                                 break;
+                     case 2:
+                          camera.setPipelineIndex(2);
+                              toggle_pipeline = 3;
+                                 break;
+                     case 3: 
+                         camera.setPipelineIndex(3);
+                              toggle_pipeline = 1;
+                                 break;
     }
       }
         }

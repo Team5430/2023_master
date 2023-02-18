@@ -1,10 +1,11 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 //import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 //import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.wpilibj.motorcontrol.MotorController;
@@ -12,15 +13,22 @@ import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.wpilibj.DigitalInput;
 //import java.beans.Encoder;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
 public class Arm implements Runnable{
 
     static boolean loop = true;
     //Counter mCounter = new Counter(new DigitalInput(0));
-
-    static TalonSRX armMotor = new TalonSRX(Drive.motorPorts[0]);
-    static TalonSRX towerMotor = new TalonSRX(Drive.motorPorts[1]);
+    //declaring motor controllers for Arm
+    static MotorController leftSeatMotor = new WPI_TalonSRX(0);
+    static MotorController rightSeatMotor = new WPI_TalonSRX(1);  
+    //motors set into a group to program them together when needed   
+    static MotorControllerGroup seatMotors = new MotorControllerGroup(leftSeatMotor, rightSeatMotor);
+   // static TalonSRX armMotor1 = new TalonSRX(Drive.motorPorts[0]);
+   // static TalonSRX armMotor2 = new TalonSRX(Drive.motorPorts[1]);
     static Encoder encoder = new Encoder(2, 3);
+   
     
         /* Jio note! Hey hey hey! I did a lot of work on encoders so please read ALL of it!
          
@@ -66,14 +74,33 @@ public class Arm implements Runnable{
     public void run(){
 
         encoder.setDistancePerPulse(4);
-        ((TalonSRX) armMotor).setNeutralMode(NeutralMode.Brake);
+        (((IMotorController) seatMotors) ).setNeutralMode(NeutralMode.Brake);
+    while(loop){
+
+       if(Robot.controller0.getRawAxis(3) > .5){
+        //if directing the right joystick upwards, it shall move the arm outwards
+            leftSeatMotor.set(0.9);
+
+            rightSeatMotor.set(-0.9);
+
+       if(Robot.controller0.getRawAxis(3) <.5){
+        //if directing the right joystick downwards, it shall move the arm inwards
+            leftSeatMotor.set(-0.9);
+
+            rightSeatMotor.set(0.9);
+  }
+    }
+       }
+
+        }{
+    
 
         
         
     
         while(loop){
             //armPos = encoder.getDistance();
-            
+            //no using button 0 as wpilib returns errors on how it doesn't like that; unless you delcare it;  controller0(0) == true
             if(Robot.controller0.getRawButton(1)){
                 while(Robot.controller0.getRawButton(1)){
 
@@ -84,7 +111,7 @@ public class Arm implements Runnable{
             //armMotor.set
             
 
-            
+            //two buttons one goes forward and one goes back; it controls; controls arm
         }
     }
 
