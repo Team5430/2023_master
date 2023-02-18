@@ -74,8 +74,8 @@ public class Arm implements Runnable{
         while(loop){
             //armPos = encoder.getDistance();
             
-            if(Robot.controller0.getRawButton(0)){
-                while(Robot.controller0.getRawButton(0)){
+            if(Robot.controller0.getRawButton(1)){
+                while(Robot.controller0.getRawButton(1)){
 
                 }
                 encoder.reset();
