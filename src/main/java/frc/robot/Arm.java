@@ -62,7 +62,7 @@ public class Arm implements Runnable{
          * 
          * Use "reset()" to zero the encoder. Good luck~
         */ 
-    
+            //Was edited to be able to use thr seat motor's encoder - RL
 
         // JL, below code establishes the three constants for PID loops plus the variable for armPosition.
     double kP = 1;

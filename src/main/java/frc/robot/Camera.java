@@ -52,6 +52,7 @@ public class Camera implements Runnable{
                      } else {
                             // If we have no targets, stay still.
                              Drive.driveTrain.tankDrive(Drive.power1, Drive.power2);
+                             //need to add turn here
                      }
                  }
                      if(joystickButton(9)){
