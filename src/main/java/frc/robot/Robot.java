@@ -65,8 +65,7 @@ private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public void robotPeriodic() {
 
 // updating the value from the encoder 
-  Double encoderVal =  Arm.Sencoder.getDistance();
-  SmartDashboard.putNumber("Encoder",encoderVal);
+  SmartDashboard.putNumber("Encoder",Arm.position);
 
   }
   @Override

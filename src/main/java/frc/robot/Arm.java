@@ -1,5 +1,7 @@
 package frc.robot;
 
+import javax.swing.text.Position;
+
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 //import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -8,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Counter;
 //import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 //import edu.wpi.first.wpilibj.Counter;
 //import edu.wpi.first.wpilibj.DigitalInput;
@@ -28,7 +31,7 @@ public class Arm implements Runnable{
    // static TalonSRX armMotor1 = new TalonSRX(Drive.motorPorts[0]);
    // static TalonSRX armMotor2 = new TalonSRX(Drive.motorPorts[1]);
    // static Encoder encoder = new Encoder(2, 3);
-    public static Encoder Sencoder = new Encoder(2,3);
+    Counter motorCounter = new Counter(4);
     
     
         /* Jio note! Hey hey hey! I did a lot of work on encoders so please read ALL of it!
@@ -62,62 +65,56 @@ public class Arm implements Runnable{
          * 
          * Use "reset()" to zero the encoder. Good luck~
         */ 
-            //Was edited to be able to use thr seat motor's encoder - RL
+            //Was edited to be able to use the seat motor's encoder - RL
 
         // JL, below code establishes the three constants for PID loops plus the variable for armPosition.
     double kP = 1;
     double kI = 1;
     double kD = 1;
     double armPos = 0;  
-
-    PIDController pidSystem = new PIDController(kP, kI, kD);
+    public static int position = 0;
+   
 
     public void run(){
-
-        Sencoder.setDistancePerPulse(4);
-        (((IMotorController) seatMotors) ).setNeutralMode(NeutralMode.Brake);
-    while(loop){
-
-       if(Robot.controller0.getRawAxis(3) > .5){
-        //if directing the right joystick upwards, it shall move the arm outwards
-            leftSeatMotor.set(0.9);
-
-            rightSeatMotor.set(-0.9);
-
-       if(Robot.controller0.getRawAxis(3) <.5){
-        //if directing the right joystick downwards, it shall move the arm inwards
-            leftSeatMotor.set(-0.9);
-
-            rightSeatMotor.set(0.9);
-            //needed safety position needed useing armPos to prevent floor damage and/or robot damage 
-  }
-    }
-       }
-
-        }{
-    
-
-        
-        
-    
+            
         while(loop){
+        
+     if(Robot.controller0.getRawAxis(3) > .5){position += motorCounter.get();} // if joystick for arm is going up, position goes up in numbers
+        if(Robot.controller0.getRawAxis(3) < .5){position -= motorCounter.get();}// if joystick is going downwards, position goes down in numbers
+            if(Robot.controller0.getRawAxis(3) > .5){
+             //if directing the right joystick upwards, it shall move the arm outwards
+                leftSeatMotor.set(0.9);
+
+                rightSeatMotor.set(-0.9);
+       }
+                if(Robot.controller0.getRawAxis(3) <.5){
+            //if directing the right joystick downwards, it shall move the arm inwards
+                leftSeatMotor.set(-0.9);
+
+                rightSeatMotor.set(0.9);
+            //needed safety position needed useing armPos to prevent floor damage and/or robot damage 
+            }
             //armPos = encoder.getDistance();
             //no using button 0 as wpilib returns errors on how it doesn't like that; unless you delcare it;  controller0(0) == true
             if(Robot.controller0.getRawButton(1)){
                 while(Robot.controller0.getRawButton(1)){
 
                 }
-                Sencoder.reset();
+                
             }
+
+            
+            
             
             //armMotor.set
             
 
             //two buttons one goes forward and one goes back; it controls; controls arm
+            }
         }
     }
 
 
-}
+
 
 
