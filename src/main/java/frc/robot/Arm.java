@@ -11,11 +11,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-//import edu.wpi.first.wpilibj.Counter;
-//import edu.wpi.first.wpilibj.DigitalInput;
 //import java.beans.Encoder;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Counter.Mode;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
@@ -31,7 +31,7 @@ public class Arm implements Runnable{
    // static TalonSRX armMotor1 = new TalonSRX(Drive.motorPorts[0]);
    // static TalonSRX armMotor2 = new TalonSRX(Drive.motorPorts[1]);
    // static Encoder encoder = new Encoder(2, 3);
-    Counter motorCounter = new Counter(4);
+    Counter motorCounter = new Counter(new DigitalInput(1));
     
     
         /* Jio note! Hey hey hey! I did a lot of work on encoders so please read ALL of it!
@@ -41,7 +41,7 @@ public class Arm implements Runnable{
          * This encoder code initializes a VEX On-Shaft encoder based on how its plugged into the RoboRio DIO ports.
          * The order only determines which direction (clockwise,counterclockwise) is positive, but overall when
          * wiring the only thing that matters is the coloring. Yellow/white goes into the S slot (aka source/data),
-         * Red goes into 5V (5-volt), and black/brown goes into the three line label (ground). 
+         * Red goes into 5V (5-volt),Angle and black/brown goes into the three line label (ground). 
          * 
          * Got that? Nice! As for the actual encoder inputs, when using the command ".getDistance" it will give
          * an amount of "encoder units." One full axle rotation is 90 units, and the encoder reads in fourths, so
@@ -112,6 +112,11 @@ public class Arm implements Runnable{
             //two buttons one goes forward and one goes back; it controls; controls arm
             }
         }
+
+
+    private Mode DigitalInput(int i) {
+        return null;
+    }
     }
 
 
