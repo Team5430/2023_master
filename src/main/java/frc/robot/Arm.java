@@ -72,7 +72,7 @@ public class Arm implements Runnable{
     double kI = 1;
     double kD = 1;
     double armPos = 0;  
-    public static int position = 0;
+    public static double position;
    
 
     public void run(){

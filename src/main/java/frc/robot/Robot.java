@@ -65,7 +65,7 @@ private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public void robotPeriodic() {
 
 // updating the value from the encoder 
-  SmartDashboard.putNumber("Encoder",Arm.position);
+  SmartDashboard.putNumber("Seat motor Values", Arm.position);
 
   }
   @Override
