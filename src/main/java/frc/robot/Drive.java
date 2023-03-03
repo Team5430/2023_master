@@ -14,6 +14,16 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class Drive implements Runnable{
+  /*
+    Motor Dex
+    0 = seatMotor(base)
+    1 = 
+    2 = backRight
+    3 = backleft
+    4 = frontRight
+    5 = frontLeft
+    
+  */
     public static int[] motorPorts = { 0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11 };
     static boolean loop = true; //enables loop for teleop
     static Timer _timer = new Timer(); //declares a timer for the smooth in/out system

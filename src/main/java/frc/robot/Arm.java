@@ -24,10 +24,10 @@ public class Arm implements Runnable{
     static boolean loop = true;
     //Counter mCounter = new Counter(new DigitalInput(0));
     //declaring motor controllers for Arm
-    static MotorController leftSeatMotor = new WPI_TalonSRX(0);
-    static MotorController rightSeatMotor = new WPI_TalonSRX(1);  
+    static MotorController seatMotors = new WPI_TalonSRX(Drive.motorPorts[0]);
+    static MotorController extendMotor = new WPI_TalonSRX(Drive.motorPorts[1]);  
     //motors set into a group to program them together when needed   
-    static MotorControllerGroup seatMotors = new MotorControllerGroup(leftSeatMotor, rightSeatMotor);
+    //static MotorControllerGroup seatMotors = new MotorControllerGroup(leftSeatMotor, rightSeatMotor); commented
    // static TalonSRX armMotor1 = new TalonSRX(Drive.motorPorts[0]);
    // static TalonSRX armMotor2 = new TalonSRX(Drive.motorPorts[1]);
    // static Encoder encoder = new Encoder(2, 3);
@@ -83,15 +83,11 @@ public class Arm implements Runnable{
         if(Robot.controller0.getRawAxis(3) < .5){position -= motorCounter.get();}// if joystick is going downwards, position goes down in numbers
             if(Robot.controller0.getRawAxis(3) > .5){
              //if directing the right joystick upwards, it shall move the arm outwards
-                leftSeatMotor.set(0.9);
-
-                rightSeatMotor.set(-0.9);
+                seatMotors.set(0.9);
        }
                 if(Robot.controller0.getRawAxis(3) <.5){
             //if directing the right joystick downwards, it shall move the arm inwards
-                leftSeatMotor.set(-0.9);
-
-                rightSeatMotor.set(0.9);
+                seatMotors.set(-0.9);
             //needed safety position needed useing armPos to prevent floor damage and/or robot damage 
             }
             //armPos = encoder.getDistance();
@@ -102,6 +98,8 @@ public class Arm implements Runnable{
                 }
                 
             }
+
+
 
             
             
@@ -118,6 +116,9 @@ public class Arm implements Runnable{
         return null;
     }
     }
+
+
+
 
 
 
