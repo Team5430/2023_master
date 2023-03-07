@@ -22,7 +22,6 @@ public class Drive implements Runnable{
     3 = backleft
     4 = frontRight
     5 = frontLeft
-    
   */
     public static int[] motorPorts = { 0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11 };
     static boolean loop = true; //enables loop for teleop
