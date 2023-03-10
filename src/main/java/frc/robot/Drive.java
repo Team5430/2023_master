@@ -14,6 +14,16 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class Drive implements Runnable{
+
+/*Declares motor ports.
+    0 = towerArm
+    1 = extendArm
+    2 = backRight
+    3 = backLeft
+    4 = frontRight
+    5 = frontLeft
+    6 = gripMotor
+  */
     public static int[] motorPorts = { 0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11 };
     static boolean loop = true; //enables loop for teleop
     static Timer _timer = new Timer(); //declares a timer for the smooth in/out system
@@ -51,7 +61,7 @@ public class Drive implements Runnable{
                 if(_timer.get() > .5){ //if the timer is greater than .5 seconds
                     _timer.stop(); //stop the timer
                        }          
-            driveTrain.tankDrive(-(Robot.joystickLeft.getRawAxis(1)  * VariableSpeed.getMultiplier() /*_timer.get()*2  */ ) ,(Robot.joystickRight.getRawAxis(1) * VariableSpeed.getMultiplier() /*_timer.get()*2 */ )); //drive train takes inputs from joystick and multiplies by two as well as the timer, creating a smoothing system
+            driveTrain.tankDrive(-(Robot.joystickLeft.getRawAxis(1)  * VariableSpeed.getMultiplier() /*_timer.get()*2  */ ) ,(Robot.joystickRight.getRawAxis(1) * VariableSpeed.getMultiplier() * 1.05 /*_timer.get()*2 */ )); //drive train takes inputs from joystick and multiplies by two as well as the timer, creating a smoothing system
           } else { //if there is not input
             driveTrain.tankDrive(0, 0); //set both sides to 0
             _timer.reset(); //reset the smoothing timer
