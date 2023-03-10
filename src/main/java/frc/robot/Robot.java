@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 
 /**
@@ -22,7 +23,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
-  //threads
+
+  //Threads
   Drive driveRef =  new Drive();
 public Thread drive = new Thread(driveRef); //creates a thread for drivetrain
 VariableSpeed safety = new VariableSpeed();
@@ -31,11 +33,19 @@ public Thread arm = new Thread(armRef);
 private Thread speedSafety = new Thread(safety);
 Camera cameraRef = new Camera();
 public Thread camera = new Thread(cameraRef);
+
+// Autonomous Things
 private static final String kDefaultAuto = "Default";
 private static final String kUTurnAuto = "Uturn Auto";
 private static final String kLoopAuto = "Loop Auto";
+private static final String middleauto = "Middle";
+private static final String shootdock = "Shoot and Dock";
+
+
 private String m_autoSelected;
 private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+
 
 public double speedConstant = 3.22;
 public double maxSpeed = 16.4;
@@ -120,7 +130,7 @@ public int autoStatus = 0;
        s_timer.reset();
     while(s_timer.get() < 1){
   
-      Arm.gripMotor.set(force); // ControlMode.PercentOutput basically tells next number 
+    Gripper.gripperMotor.set(ControlMode.PercentOutput, force); // ControlMode.PercentOutput basically tells next number 
       
     }
   
@@ -130,7 +140,7 @@ public int autoStatus = 0;
     s_timer.reset();
  while(s_timer.get() < 1){
 
-   Arm.gripMotor.set(-force); // ControlMode.PercentOutput basically tells next number 
+   Gripper.gripperMotor.set(ControlMode.PercentOutput, force); // ControlMode.PercentOutput basically tells next number 
    
  }
 
