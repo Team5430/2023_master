@@ -152,8 +152,12 @@ public int autoStatus = 0;
   }
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
 
+// updating the value from the encoder 
+  SmartDashboard.putNumber("Seat motor Values", Arm.position);
+
+  }
   @Override
   public void autonomousInit() {
 
