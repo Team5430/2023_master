@@ -24,8 +24,8 @@ public class Arm implements Runnable{
     static boolean loop = true;
     //Counter mCounter = new Counter(new DigitalInput(0));
     //declaring motor controllers for Arm
-    static MotorController seatMotors = new WPI_TalonSRX(Drive.motorPorts[0]);
-    static MotorController extendMotor = new WPI_TalonSRX(Drive.motorPorts[1]);  
+    static MotorController seatMotors = new WPI_TalonSRX(Drive.motorPorts[6]);
+    //static MotorController extendMotor = new WPI_TalonSRX(Drive.motorPorts[1]);  
     //motors set into a group to program them together when needed   
     //static MotorControllerGroup seatMotors = new MotorControllerGroup(leftSeatMotor, rightSeatMotor); commented
    // static TalonSRX armMotor1 = new TalonSRX(Drive.motorPorts[0]);
@@ -79,10 +79,10 @@ public class Arm implements Runnable{
             
         while(loop){
         
-     if(seatMotors.get() > 0){position += motorCounter.get();} //         if(Robot.controller0.getRawAxis(3) < .5){position -= motorCounter.get();}// if joystick is going downwards, position goes down in numbers
+     if(seatMotors.get() > 0){position += motorCounter.get();} //       
 //if joystick for arm is going up, position goes up in numbers
         if(seatMotors.get() < 0){position -= motorCounter.get();}// if joystick is going downwards, position goes down in numbers
-        if(Robot.controller0.getRawAxis(5) > 0.1 || Robot.controller0.getRawAxis(5) < -0.1)
+        if(Robot.controller0.getRawAxis(5) > 0.1 || Robot.controller0.getRawAxis(5) < -0.1){
             if(Robot.controller0.getRawAxis(5) > 0){
              //if directing the right joystick upwards, it shall move the arm outwards
                 seatMotors.set(0.1);
@@ -92,6 +92,7 @@ public class Arm implements Runnable{
                 seatMotors.set(-0.1);
             //needed safety position needed useing armPos to prevent floor damage and/or robot damage 
             }
+        }
             //if(position == (-3.0)){seatMotors.set(0.0);} // stops arm so that it doesnt heat floor or components.
             //armPos = encoder.getDistance();
             //no using button 0 as wpilib returns errors on how it doesn't like that; unless you delcare it;  controller0(0) == true

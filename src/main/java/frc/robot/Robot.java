@@ -38,7 +38,7 @@ public Thread extend = new Thread(extendRef);
 Gripper gripperRef = new Gripper();
 public Thread gripper = new Thread(gripperRef);
 
-// Autonomous Things
+// JL, Declares autos as strings
 private static final String kDefaultAuto = "Default";
 private static final String kUTurnAuto = "Uturn Auto";
 private static final String kLoopAuto = "Loop Auto";
@@ -234,13 +234,9 @@ public int autoStatus = 0;
           break;
       case shootdock:
 
-
-
-
-
       Extend.armExtend(0.5);
       //insert rotate arm length 
-      Gripper.gripperBite(0.3);
+        Gripper.gripperBite(0.3);
       Extend.armRetract(0.3);
       for(int twice = 0; twice<2; twice++){
             turn90Degrees("left"); // turn 180 degrees

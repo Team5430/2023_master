@@ -3,39 +3,52 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Extend implements Runnable {
     
     static Timer s_timer = new Timer();
-    static MotorController extendMotor = new WPI_TalonSRX(Drive.motorPorts[1]); 
-    static int extending = 0;
+    static TalonSRX extendMotor = new TalonSRX(Drive.motorPorts[8]); 
+   
+    // JL, Change input in DigitalInput() to reflect which port the limit switch is located
     static DigitalInput backLimitSwitch = new DigitalInput(0);
-    static int loop = 1; 
-    static int mode = 1;
 
+    // JL, loop is a safety variable and will prevent what's inside the loop when set to 0
+    static int loop = 1; 
+    // JL, mode will determine how input will work. 1 = A-button toggle, 2 = leftStick control
+    static int mode = 1;
+    // JL, stores whether the robot believes its (0) unextended or (1) extended.
+    static int extending = 0;
+
+
+    // JL, function to "zero" arm. Usable only with limit switch attached to back of arm.
     public static void zeroExtend(){
     
     while(backLimitSwitch.get() == false){
-        extendMotor.set(-0.05);
+        extendMotor.set(ControlMode.PercentOutput, -0.05);
     }
         extending = 0;
     }
 
-
+    // JL, function to extend arm with a set power for a second. Trial and error required to determine
+    // best force setting.
     public static void armExtend(double extendforce){
     s_timer.reset();
     while(s_timer.get() < 1){
   
-      Arm.extendMotor.set(extendforce); // ControlMode.PercentOutput basically tells next number 
+        extendMotor.set(ControlMode.PercentOutput, extendforce); // ControlMode.PercentOutput basically tells next number 
     }
     extending = 1;
   
   }
+    // JL, function to retract arm with a set power for a second. Can be replaced with armExtend as
+    // long as armExtend's force is set to a negative value. Same purpose as extend.
   public static void armRetract(double extendforce){
     s_timer.reset();
     while(s_timer.get() < 1){
   
-      Arm.extendMotor.set(-extendforce); // ControlMode.PercentOutput basically tells next number 
+      extendMotor.set(ControlMode.PercentOutput, -extendforce); // ControlMode.PercentOutput basically tells next number 
     }
     extending = 0;
   }
@@ -45,11 +58,11 @@ public class Extend implements Runnable {
         while(loop==1){
           switch(mode){
 
-            case 1:
+            case 1: // JL, A-button toggle mode, toggle bet
 
           if(Robot.controller0.getRawButton(0)){
-            while(!Robot.controller0.getRawButton(0));
-            if(extending == 1){
+            while(Robot.controller0.getRawButton(0)); // JL, while statement will prevent action until A is let go
+            if(extending == 1){ //i
               armRetract(0.1);
             }else{
               armExtend(0.1);
@@ -59,11 +72,13 @@ public class Extend implements Runnable {
 
             break;
 
-            case 2:
-
+            case 2: // JL, Left-stick control mode
+              // JL, deadzone code, only allows input to armExtend if input is higher than 0.1 or below -0.1
               if(Robot.controller0.getRawAxis(1) > 0.1 || Robot.controller0.getRawAxis(1) < -0.1){
-                    armExtend(Robot.controller0.getRawAxis(1));
+                    armExtend(Robot.controller0.getRawAxis(1) * 0.5); // JL, "* 0.5" halves speed for safety
                     }
+
+            break;
 
           }
 
