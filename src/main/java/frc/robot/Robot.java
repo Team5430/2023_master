@@ -323,12 +323,12 @@ public static boolean joystickButton(int button){
     
   }
   public void middle(){// if you were to start in the middle 
-    s_timer.reset(); //sets timer to 0 so everything can play normallyz
+    s_timer.reset(); //sets timer to 0 so everything can play normally
     s_timer.start(); //starts timer so that everything plays normally
       driveInMultiple(5.0, 0.5);//eyeballeed the 5.0 feet
 }
  /* public void planleft(){// if you were to start in the right side
-    s_timer.reset(); //sets timer to 0 so everything can play normallyz
+    s_timer.reset(); //sets timer to 0 so everything can play normally
     s_timer.start(); //starts timer so that everything plays normally
     while (controller0.getRawButton(0)){ 
   }*/
@@ -350,7 +350,6 @@ public static boolean joystickButton(int button){
       Extend.armExtend(0.3);
       Gripper.gripperBite(0.5);
       Extend.armRetract(0.3);
-
       driveInMultiple(-1.0, 1.0);
       turn90Degrees("right");
       driveInMultiple(4.0, 1.0);
