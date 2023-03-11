@@ -33,11 +33,16 @@ public Thread arm = new Thread(armRef);
 private Thread speedSafety = new Thread(safety);
 Camera cameraRef = new Camera();
 public Thread camera = new Thread(cameraRef);
+Extend extendRef = new Extend();
+public Thread extend = new Thread(extendRef);
+Gripper gripperRef = new Gripper();
+public Thread gripper = new Thread(gripperRef);
 
 // Autonomous Things
 private static final String kDefaultAuto = "Default";
 private static final String kUTurnAuto = "Uturn Auto";
 private static final String kLoopAuto = "Loop Auto";
+private static final String kPanic = "Panic Time";
 private static final String middleauto = "Middle";
 private static final String shootdock = "Shoot and Dock";
 
@@ -109,6 +114,7 @@ public int autoStatus = 0;
        
       }
     }
+    /* Relocated to Extend.java
   public void armExtend(double extendforce){
     s_timer.reset();
     while(s_timer.get() < 1){
@@ -125,7 +131,10 @@ public int autoStatus = 0;
     }
   
   }
-  public  void gripperbite(double force){//gripper gets something, parameter force is basically 
+  */
+
+  /* Relocated to Gripper.java
+  public  void gripperBite(double force){//gripper gets something, parameter force is basically 
   
        s_timer.reset();
     while(s_timer.get() < 1){
@@ -145,7 +154,7 @@ public int autoStatus = 0;
  }
 
 }
-
+*/
   @Override
   public void robotInit() {
     //Thread starters 
@@ -153,11 +162,15 @@ public int autoStatus = 0;
     speedSafety.start();
     arm.start();
     camera.start();
+    gripper.start();
+    extend.start();
 
     //Puts auto list onto Shuffleboard
     SmartDashboard.putData("Auton Choice",m_chooser);
     m_chooser.addOption("Loop Auto", kLoopAuto);
     m_chooser.addOption("Volt Switch", kUTurnAuto);
+    m_chooser.addOption("Middle Position Auto", middleauto);
+    m_chooser.addOption("Shoot and Dock Autonomous Option", shootdock);
 
   }
 
@@ -179,12 +192,80 @@ public int autoStatus = 0;
   public void autonomousPeriodic() {
     switch(m_autoSelected){
       case kDefaultAuto:
-        baseauton_basic();
+
+
+
+         driveInMultiple(18.6666667, 1.0);//driveiintime method just moves in a straight line
+      Extend.armExtend(0.3);
+      Gripper.gripperBite(0.3);//extend the arm with 30% power but since we dont know yet, well just leave this as a prototype
+    /**Ethan here, im proposing if we get the length of the arm by getting distance the robot has traveled 
+      *minus 18.666667 (which is the length of the nodes to the game piece but since we are using percentage to extend the arm, we dont know yet.)
+      *
+      *
+      **/
+      Extend.armRetract(0.3);
+      for(int twice = 0; twice<2; twice++){
+      
+        turn90Degrees("left"); // turn 180 degrees
+      }//changeable depending on how far we want the robot should be from the target
+        driveInMultiple(18.6666667, 1.0);
+        Extend.armExtend(0.5);
+       //insert rotate arm length 
+       Gripper.gripperBite(0.0); // opening the gripper by setting power of motor to zero
+
+
+
+
           break;
       case kUTurnAuto:
        
           break;
       case kLoopAuto:
+          break;
+      case middleauto:
+
+
+
+       driveInMultiple(5.0, 0.5);//eyeballeed the 5.0 feet//just dockkkkk `
+
+
+
+
+          break;
+      case shootdock:
+
+
+
+
+
+      Extend.armExtend(0.5);
+      //insert rotate arm length 
+      Gripper.gripperBite(0.3);
+      Extend.armRetract(0.3);
+      for(int twice = 0; twice<2; twice++){
+            turn90Degrees("left"); // turn 180 degrees
+          }
+      driveInMultiple(18.6666667, 1.0);
+      turn90Degrees("right");
+      driveInMultiple(16.6666667, 1.0);
+
+      Extend.armExtend(0.3);
+      Gripper.gripperBite(0.5);
+      Extend.armRetract(0.3);
+
+      driveInMultiple(-1.0, 1.0);
+      turn90Degrees("right");
+      driveInMultiple(4.0, 1.0);
+      turn90Degrees("right");
+      driveInMultiple(2.0, 0.5); //trying to manually code this to balance the robot -ethan
+      /*all of these
+       * are just concepts!!!
+       */
+
+
+
+
+
           break;
     }
 
@@ -227,22 +308,22 @@ public static boolean joystickButton(int button){
     s_timer.start(); //starts timer so that everything plays normally
     
       driveInMultiple(18.6666667, 1.0);//driveiintime method just moves in a straight line
-      armExtend(0.3);
-      gripperbite(0.3);//extend the arm with 30% power but since we dont know yet, well just leave this as a prototype
+      Extend.armExtend(0.3);
+      Gripper.gripperBite(0.3);//extend the arm with 30% power but since we dont know yet, well just leave this as a prototype
     /**Ethan here, im proposing if we get the length of the arm by getting distance the robot has traveled 
       *minus 18.666667 (which is the length of the nodes to the game piece but since we are using percentage to extend the arm, we dont know yet.)
       *
       *
       **/
-      armRetract(0.3);
+      Extend.armRetract(0.3);
       for(int twice = 0; twice<2; twice++){
       
         turn90Degrees("left"); // turn 180 degrees
       }//changeable depending on how far we want the robot should be from the target
         driveInMultiple(18.6666667, 1.0);
-        armExtend(0.5);
+        Extend.armExtend(0.5);
        //insert rotate arm length 
-       gripperbite(0.0); // opening the gripper by setting power of motor to zero
+       Gripper.gripperBite(0.0); // opening the gripper by setting power of motor to zero
     
   }
   public void middle(){// if you were to start in the middle 
@@ -259,10 +340,10 @@ public static boolean joystickButton(int button){
   public void planshootndock(){//WIPP //i plan to do 3 of these depending on where the other alliance robots want to be (right left or middle)
     s_timer.reset(); //sets timer to 0 so everything can play normallyz
     s_timer.start(); //starts timer so that everything plays normally
-      armExtend(0.5);
+      Extend.armExtend(0.5);
       //insert rotate arm length 
-      gripperbite(0.3);
-      armRetract(0.3);
+      Gripper.gripperBite(0.3);
+      Extend.armRetract(0.3);
       for(int twice = 0; twice<2; twice++){
             turn90Degrees("left"); // turn 180 degrees
           }
@@ -270,9 +351,9 @@ public static boolean joystickButton(int button){
       turn90Degrees("right");
       driveInMultiple(16.6666667, 1.0);
 
-      armExtend(0.3);
-      gripperbite(0.5);
-      armRetract(0.3);
+      Extend.armExtend(0.3);
+      Gripper.gripperBite(0.5);
+      Extend.armRetract(0.3);
 
       driveInMultiple(-1.0, 1.0);
       turn90Degrees("right");

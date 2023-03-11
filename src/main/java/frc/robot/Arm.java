@@ -79,22 +79,25 @@ public class Arm implements Runnable{
             
         while(loop){
         
-     if(Robot.controller0.getRawAxis(3) > .5){position += motorCounter.get();} // if joystick for arm is going up, position goes up in numbers
-        if(Robot.controller0.getRawAxis(3) < .5){position -= motorCounter.get();}// if joystick is going downwards, position goes down in numbers
-            if(Robot.controller0.getRawAxis(3) > .5){
+     if(seatMotors.get() > 0){position += motorCounter.get();} //         if(Robot.controller0.getRawAxis(3) < .5){position -= motorCounter.get();}// if joystick is going downwards, position goes down in numbers
+//if joystick for arm is going up, position goes up in numbers
+        if(seatMotors.get() < 0){position -= motorCounter.get();}// if joystick is going downwards, position goes down in numbers
+        if(Robot.controller0.getRawAxis(5) > 0.1 || Robot.controller0.getRawAxis(5) < -0.1)
+            if(Robot.controller0.getRawAxis(5) > 0){
              //if directing the right joystick upwards, it shall move the arm outwards
-                seatMotors.set(0.9);
+                seatMotors.set(0.1);
        }
-                if(Robot.controller0.getRawAxis(3) <.5){
+                if(Robot.controller0.getRawAxis(5) < 0){
             //if directing the right joystick downwards, it shall move the arm inwards
-                seatMotors.set(-0.9);
+                seatMotors.set(-0.1);
             //needed safety position needed useing armPos to prevent floor damage and/or robot damage 
             }
+            //if(position == (-3.0)){seatMotors.set(0.0);} // stops arm so that it doesnt heat floor or components.
             //armPos = encoder.getDistance();
             //no using button 0 as wpilib returns errors on how it doesn't like that; unless you delcare it;  controller0(0) == true
             if(Robot.controller0.getRawButton(1)){
                 while(Robot.controller0.getRawButton(1)){
-
+                    
                 }
                 
             }
