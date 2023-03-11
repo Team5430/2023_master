@@ -40,7 +40,7 @@ public class Camera implements Runnable{
     int toggle_pipeline = 1;
 
         while(loop){
-    
+            //WIP
                      if (joystickButton(3)){
                         while(joystickButton(3)){
                                 // Vision-alignment mode

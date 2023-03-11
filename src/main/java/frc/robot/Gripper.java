@@ -54,8 +54,8 @@ public class Gripper implements Runnable {
     public void run() {
             if (loop==1){
                 if (mode == 1){ // JL, B-button Toggle mode, B will toggle between gripping and non-gripping
-          if(Robot.controller0.getRawButton(1)){
-            while(!Robot.controller0.getRawButton(1));
+          if(Robot.controller0.getRawButton(2)){
+            while(!Robot.controller0.getRawButton(2));
             if(gripping == 1){
               gripperRetract(0.1);
               

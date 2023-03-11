@@ -60,8 +60,8 @@ public class Extend implements Runnable {
 
             case 1: // JL, A-button toggle mode, toggle bet
 
-          if(Robot.controller0.getRawButton(0)){
-            while(Robot.controller0.getRawButton(0)); // JL, while statement will prevent action until A is let go
+          if(Robot.controller0.getRawButton(1)){
+            while(Robot.controller0.getRawButton(1)); // JL, while statement will prevent action until A is let go
             if(extending == 1){ //i
               armRetract(0.1);
             }else{
