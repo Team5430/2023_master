@@ -82,12 +82,13 @@ public class Arm implements Runnable{
     public void run(){
             
         while(loop){
-
+//if not auton then,
             if(!auton){
-                
+                //is the left Y axis being moved up or down?
                 if(Robot.controller0.getRawAxis(1) > 0.1 
                     ||
                      Robot.controller0.getRawAxis(1) < 0.1){ seatMotors.set(
+                        //if so, set seatMotors output to the corresponding number on the joystick
                         ControlMode.PercentOutput, Robot.controller0.getRawAxis(1));
                      }
 
