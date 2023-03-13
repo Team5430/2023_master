@@ -22,12 +22,12 @@ public class Gripper implements Runnable {
     public static void gripperBite(double force){//gripper gets something, parameter force is basically 
   
        s_timer.reset();
-    while(s_timer.get() < 1){
+          while(s_timer.get() < 1){
   
-    gripperMotor.set(ControlMode.PercentOutput, force); // ControlMode.PercentOutput basically tells next number 
-    gripping = 1;
+           gripperMotor.set(ControlMode.PercentOutput, force); // ControlMode.PercentOutput basically tells next number 
+           gripping = 1;
     }
-  
+    
     }
     // JL, function to retract arm with a set power for a second. Can be replaced with gripperBite as
     // long as gripperBite's force is set to a negative value. Same purpose as extend.
@@ -52,7 +52,7 @@ public class Gripper implements Runnable {
 //run() for testing gripping objects
     @Override
     public void run() {
-            if (loop==1){
+     if (loop==1){
                 if (mode == 1){ // JL, B-button Toggle mode, B will toggle between gripping and non-gripping
           if(Robot.controller0.getRawButton(2)){
             while(!Robot.controller0.getRawButton(2));

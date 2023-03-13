@@ -25,7 +25,7 @@ public class Arm implements Runnable{
     //Counter mCounter = new Counter(new DigitalInput(0));
     //declaring motor controllers for Arm
     static MotorController seatMotors = new WPI_TalonSRX(Drive.motorPorts[6]);
-    //motors set into a group to program them together when needed   
+    //motors set into a group to program them together when needed  
     //static MotorControllerGroup seatMotors = new MotorControllerGroup(leftSeatMotor, rightSeatMotor); commented
     Counter motorCounter = new Counter(new DigitalInput(1));
     

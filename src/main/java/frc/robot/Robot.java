@@ -263,6 +263,8 @@ public int autoStatus = 0;
 
 
           break;
+        case testauto:
+        
     }
 
   }
