@@ -2,10 +2,13 @@ package frc.robot;
 
 import javax.swing.text.Position;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 //import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 //import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -18,14 +21,16 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Counter.Mode;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 public class Arm implements Runnable{
 
     static boolean loop = true;
+    static boolean auton = false;
     //Counter mCounter = new Counter(new DigitalInput(0));
     //declaring motor controllers for Arm
     static MotorController seatMotors = new WPI_TalonSRX(Drive.motorPorts[6]);
-    //motors set into a group to program them together when needed  
+    //motors set into a group to program them together when needed   
     //static MotorControllerGroup seatMotors = new MotorControllerGroup(leftSeatMotor, rightSeatMotor); commented
     Counter motorCounter = new Counter(new DigitalInput(1));
     
@@ -74,39 +79,24 @@ public class Arm implements Runnable{
     public void run(){
             
         while(loop){
-        
-     if(seatMotors.get() > 0){position += motorCounter.get();} //       
-//if joystick for arm is going up, position goes up in numbers
-        if(seatMotors.get() < 0){position -= motorCounter.get();}// if joystick is going downwards, position goes down in numbers
-        if(Robot.controller0.getRawAxis(3) > 0.1 || Robot.controller0.getRawAxis(5) < -0.1){
-            if(Robot.controller0.getRawAxis(3) > 0){
-             //if directing the right joystick upwards, it shall move the arm outwards
-                seatMotors.set(0.5);
-       }
-                if(Robot.controller0.getRawAxis(3) < 0){
-            //if directing the right joystick downwards, it shall move the arm inwards
-                seatMotors.set(-0.5);
-            //needed safety position needed useing armPos to prevent floor damage and/or robot damage 
-            }
-        }
-            //if(position == (-3.0)){seatMotors.set(0.0);} // stops arm so that it doesnt heat floor or components.
-            //armPos = encoder.getDistance();
-            //no using button 0 as wpilib returns errors on how it doesn't like that; unless you delcare it;  controller0(0) == true
-         
-                
+//if not auton then,
+            if(!auton){
+                //is the left Y axis being moved up or down?
+                if(Robot.controller0.getRawAxis(1) > 0.1 
+                    ||
+                     Robot.controller0.getRawAxis(1) < 0.1){ seatMotors.set(
+                        //if so, set seatMotors output to the corresponding number on the joystick
+                        ControlMode.PercentOutput, Robot.controller0.getRawAxis(1));
+                     }
+
+                }
             }
 
-
-
-            
-            
-            
-            //armMotor.set
-            
-
-            //two buttons one goes forward and one goes back; it controls; controls arm
             }
-        
+
+     
+            
+
 
 
     private Mode DigitalInput(int i) {
