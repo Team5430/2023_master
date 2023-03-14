@@ -80,6 +80,7 @@ public int autoStatus = 0;
     //previously in the code. Larger multiple value means faster travel. Max multiple should be 5. DO NOT GO PAST 5.
     public void driveInMultiple(double distance, double multiple){
       s_timer.reset();
+      s_timer.start();
       while(s_timer.get() < distance/(speedConstant)*2)
       Drive.driveTrain.tankDrive(0.2*multiple , -0.2*multiple);
     }
@@ -90,6 +91,7 @@ public int autoStatus = 0;
   
     public void driveInTime(double distance, double time){
       s_timer.reset();
+      s_timer.start();
       while(s_timer.get() < time){
         Drive.driveTrain.tankDrive((distance/time)/maxSpeed, -(distance/time)/maxSpeed);
       }
@@ -99,6 +101,7 @@ public int autoStatus = 0;
   
     public void turn90Degrees(String direction){
       s_timer.reset();
+      s_timer.start();
       while(s_timer.get() < 1){
         switch(direction){
           case "left":
@@ -164,6 +167,7 @@ public int autoStatus = 0;
     camera.start();
     gripper.start();
     extend.start();
+    
 
     //Puts auto list onto Shuffleboard
     SmartDashboard.putData("Auton Choice",m_chooser);
@@ -190,6 +194,8 @@ public int autoStatus = 0;
 
   @Override
   public void autonomousPeriodic() {
+    if(autoStatus == 0){
+      autoStatus = 1;
     switch(m_autoSelected){
       case kDefaultAuto:
 
@@ -263,9 +269,9 @@ public int autoStatus = 0;
 
 
           break;
-        case testauto:
+       
         
-    }
+    } }
 
   }
 

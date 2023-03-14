@@ -35,10 +35,12 @@ public class Extend implements Runnable {
     // best force setting.
     public static void armExtend(double extendforce){
     s_timer.reset();
+    s_timer.start();
     while(s_timer.get() < 1){
   
         extendMotor.set(ControlMode.PercentOutput, extendforce); // ControlMode.PercentOutput basically tells next number 
     }
+    extendMotor.set(ControlMode.PercentOutput, 0);
     extending = 1;
   
   }
@@ -46,10 +48,12 @@ public class Extend implements Runnable {
     // long as armExtend's force is set to a negative value. Same purpose as extend.
   public static void armRetract(double extendforce){
     s_timer.reset();
+    s_timer.start();
     while(s_timer.get() < 1){
   
       extendMotor.set(ControlMode.PercentOutput, -extendforce); // ControlMode.PercentOutput basically tells next number 
     }
+    extendMotor.set(ControlMode.PercentOutput, 0);
     extending = 0;
   }
 
@@ -61,13 +65,13 @@ public class Extend implements Runnable {
             case 1: // JL, A-button toggle mode, toggle bet
 
           if(Robot.controller0.getRawButton(1)){
-            while(Robot.controller0.getRawButton(1)); // JL, while statement will prevent action until A is let go
+            //while(Robot.controller0.getRawButton(1)); // JL, while statement will prevent action until A is let go
             if(extending == 1){ //i
               armRetract(0.1);
             }else{
               armExtend(0.1);
             }
-
+            while(!Robot.controller0.getRawButton(1));
           }
 
             break;

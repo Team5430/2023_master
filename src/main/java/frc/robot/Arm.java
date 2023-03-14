@@ -29,10 +29,15 @@ public class Arm implements Runnable{
     static boolean auton = false;
     //Counter mCounter = new Counter(new DigitalInput(0));
     //declaring motor controllers for Arm
-    static MotorController seatMotors = new WPI_TalonSRX(Drive.motorPorts[6]);
     //motors set into a group to program them together when needed   
     //static MotorControllerGroup seatMotors = new MotorControllerGroup(leftSeatMotor, rightSeatMotor); commented
     Counter motorCounter = new Counter(new DigitalInput(1));
+
+ static TalonSRX seatMotors = new TalonSRX(6);
+  public static void setSeatMotors(TalonSRX seatMotors) {
+      Arm.seatMotors = seatMotors;
+
+  }
     
     
         /* Jio note! Hey hey hey! I did a lot of work on encoders so please read ALL of it!
@@ -84,9 +89,9 @@ public class Arm implements Runnable{
                 //is the left Y axis being moved up or down?
                 if(Robot.controller0.getRawAxis(1) > 0.1 
                     ||
-                     Robot.controller0.getRawAxis(1) < 0.1){ seatMotors.set(
+                     Robot.controller0.getRawAxis(1) < -0.1){ seatMotors.set(
                         //if so, set seatMotors output to the corresponding number on the joystick
-                        ControlMode.PercentOutput, Robot.controller0.getRawAxis(1));
+                        ControlMode.PercentOutput, Robot.controller0.getRawAxis(1) * 0.5);
                      }
 
                 }
