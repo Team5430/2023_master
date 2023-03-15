@@ -167,10 +167,12 @@ public int autoStatus = 0;
     camera.start();
     gripper.start();
     extend.start();
-    
+
+    autoStatus = 0;
 
     //Puts auto list onto Shuffleboard
     SmartDashboard.putData("Auton Choice",m_chooser);
+    m_chooser.addOption("Default", kDefaultAuto);
     m_chooser.addOption("Loop Auto", kLoopAuto);
     m_chooser.addOption("Volt Switch", kUTurnAuto);
     m_chooser.addOption("Middle Position Auto", middleauto);
@@ -224,9 +226,10 @@ public int autoStatus = 0;
 
           break;
       case kUTurnAuto:
-       
+        driveInMultiple(5, 1);
           break;
       case kLoopAuto:
+        driveInMultiple(10, 1);
           break;
       case middleauto:
 
