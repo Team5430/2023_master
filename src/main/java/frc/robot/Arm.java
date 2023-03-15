@@ -94,6 +94,7 @@ public class Arm implements Runnable{
                         ControlMode.PercentOutput, Robot.controller0.getRawAxis(1) * 0.5);
                      }else{
                         seatMotors.set(ControlMode.PercentOutput, 0);
+    
                      }
 
                 }
