@@ -92,8 +92,9 @@ public class Arm implements Runnable{
                      Robot.controller0.getRawAxis(1) < -0.1){ seatMotors.set(
                         //if so, set seatMotors output to the corresponding number on the joystick
                         ControlMode.PercentOutput, Robot.controller0.getRawAxis(1) * 0.5);
-                     } else{
+                     }else{
                         seatMotors.set(ControlMode.PercentOutput, 0);
+    
                      }
 
                 }
