@@ -88,6 +88,14 @@ public int autoStatus = 0;
       //Custom Jio code~ Essentially caluculates a velocity to travel using a distance and time given.
       //Distance is distance in feet, time is the time in seconds provided to make the trip.
       //Smaller time = Faster velocity
+   public void driveInPower(double power, double time){
+    s_timer.reset();
+      s_timer.start();
+      while(s_timer.get() < time){
+        Drive.driveTrain.tankDrive(power, -power);
+      }
+       Drive.driveTrain.tankDrive(0.0, 0.0);
+    }
   
     public void driveInTime(double distance, double time){
       s_timer.reset();
@@ -168,11 +176,8 @@ public int autoStatus = 0;
     gripper.start();
     extend.start();
 
-    autoStatus = 0;
-
     //Puts auto list onto Shuffleboard
     SmartDashboard.putData("Auton Choice",m_chooser);
-    m_chooser.addOption("Default", kDefaultAuto);
     m_chooser.addOption("Loop Auto", kLoopAuto);
     m_chooser.addOption("Volt Switch", kUTurnAuto);
     m_chooser.addOption("Middle Position Auto", middleauto);
@@ -196,8 +201,6 @@ public int autoStatus = 0;
 
   @Override
   public void autonomousPeriodic() {
-    if(autoStatus == 0){
-      autoStatus = 1;
     switch(m_autoSelected){
       case kDefaultAuto:
 
@@ -205,7 +208,7 @@ public int autoStatus = 0;
 
          driveInMultiple(18.6666667, 1.0);//driveiintime method just moves in a straight line
       Extend.armExtend(0.3);
-      Gripper.gripperBite(0.3);//extend the arm with 30% power but since we dont know yet, well just leave this as a prototype
+   //   Gripper.gripperBite(0.3);//extend the arm with 30% power but since we dont know yet, well just leave this as a prototype
     /**Ethan here, im proposing if we get the length of the arm by getting distance the robot has traveled 
       *minus 18.666667 (which is the length of the nodes to the game piece but since we are using percentage to extend the arm, we dont know yet.)
       *
@@ -219,43 +222,53 @@ public int autoStatus = 0;
         driveInMultiple(18.6666667, 1.0);
         Extend.armExtend(0.5);
        //insert rotate arm length 
-       Gripper.gripperBite(0.0); // opening the gripper by setting power of motor to zero
+      // Gripper.gripperBite(0.0); // opening the gripper by setting power of motor to zero
 
 
 
 
           break;
       case kUTurnAuto:
-        driveInMultiple(5, 1);
+       
           break;
       case kLoopAuto:
-        driveInMultiple(10, 1);
           break;
       case middleauto:
+      if(autoStatus == 0){
+      
+      autoStatus = 1;
+      s_timer.reset();
 
 
-
-       driveInMultiple(5.0, 0.5);//eyeballeed the 5.0 feet//just dockkkkk `
-
+       driveInPower(0.6, 15.0);//drive 10 feet for 5 seconds
 
 
+      }
 
           break;
       case shootdock:
+      if(autoStatus == 0){
+      
+      autoStatus = 1;
+     
+      driveInPower(0.6, 10.0);
+      Gripper.gripperBite("cone");
+      driveInPower(0.7, 10.0);
 
-      Extend.armExtend(0.5);
+;/*
+      //Extend.armExtend(0.5);
       //insert rotate arm length 
-        Gripper.gripperBite(0.3);
-      Extend.armRetract(0.3);
-      for(int twice = 0; twice<2; twice++){
-            turn90Degrees("left"); // turn 180 degrees
-          }
-      driveInMultiple(18.6666667, 1.0);
+        //Gripper.gripperBite(0.3);
+     // Extend.armRetract(0.3);
+   //   for(int twice = 0; twice<2; twice++){
+       //     turn90Degrees("left"); // turn 180 degrees
+       //   }
+   //   driveInMultiple(18.6666667, 1.0);
       turn90Degrees("right");
       driveInMultiple(16.6666667, 1.0);
 
       Extend.armExtend(0.3);
-      Gripper.gripperBite(0.5);
+      Gripper.gripperBite(05);
       Extend.armRetract(0.3);
 
       driveInMultiple(-1.0, 1.0);
@@ -274,7 +287,9 @@ public int autoStatus = 0;
           break;
        
         
-    } }
+    }
+    
+    }
 
   }
 
@@ -316,7 +331,7 @@ public static boolean joystickButton(int button){
     
       driveInMultiple(18.6666667, 1.0);//driveiintime method just moves in a straight line
       Extend.armExtend(0.3);
-      Gripper.gripperBite(0.3);//extend the arm with 30% power but since we dont know yet, well just leave this as a prototype
+   //   Gripper.gripperBite(0.3);//extend the arm with 30% power but since we dont know yet, well just leave this as a prototype
     /**Ethan here, im proposing if we get the length of the arm by getting distance the robot has traveled 
       *minus 18.666667 (which is the length of the nodes to the game piece but since we are using percentage to extend the arm, we dont know yet.)
       *
@@ -330,7 +345,7 @@ public static boolean joystickButton(int button){
         driveInMultiple(18.6666667, 1.0);
         Extend.armExtend(0.5);
        //insert rotate arm length 
-       Gripper.gripperBite(0.0); // opening the gripper by setting power of motor to zero
+   //    Gripper.gripperBite(0.0); // opening the gripper by setting power of motor to zero
     
   }
   public void middle(){// if you were to start in the middle 
@@ -349,7 +364,7 @@ public static boolean joystickButton(int button){
     s_timer.start(); //starts timer so that everything plays normally
       Extend.armExtend(0.5);
       //insert rotate arm length 
-      Gripper.gripperBite(0.3);
+    //  Gripper.gripperBite(0.3);
       Extend.armRetract(0.3);
       for(int twice = 0; twice<2; twice++){
             turn90Degrees("left"); // turn 180 degrees
@@ -359,7 +374,7 @@ public static boolean joystickButton(int button){
       driveInMultiple(16.6666667, 1.0);
 
       Extend.armExtend(0.3);
-      Gripper.gripperBite(0.5);
+    //  Gripper.gripperBite(0.5);
       Extend.armRetract(0.3);
       driveInMultiple(-1.0, 1.0);
       turn90Degrees("right");

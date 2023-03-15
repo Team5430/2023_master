@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class Extend implements Runnable {
     
@@ -17,7 +18,7 @@ public class Extend implements Runnable {
     // JL, loop is a safety variable and will prevent what's inside the loop when set to 0
     static int loop = 1; 
     // JL, mode will determine how input will work. 1 = A-button toggle, 2 = leftStick control
-    static int mode = 1;
+    static int mode = 2;
     // JL, stores whether the robot believes its (0) unextended or (1) extended.
     static int extending = 0;
 
@@ -59,6 +60,9 @@ public class Extend implements Runnable {
 
 
     public void run(){
+
+      extendMotor.setNeutralMode(NeutralMode.Brake);
+
         while(loop==1){
           switch(mode){
 
@@ -78,7 +82,7 @@ public class Extend implements Runnable {
 
             case 2: // JL, Left-stick control mode
               // JL, deadzone code, only allows input to armExtend if input is higher than 0.1 or below -0.1
-              if(Robot.controller0.getRawAxis(1) > 0.1 || Robot.controller0.getRawAxis(1) < -0.1){
+              if(Robot.controller0.getRawAxis(5) > 0.1 || Robot.controller0.getRawAxis(5) < -0.1){
                     armExtend(Robot.controller0.getRawAxis(1) * 0.5); // JL, "* 0.5" halves speed for safety
                     }
 
