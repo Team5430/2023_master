@@ -83,7 +83,9 @@ public class Extend implements Runnable {
             case 2: // JL, Left-stick control mode
               // JL, deadzone code, only allows input to armExtend if input is higher than 0.1 or below -0.1
               if(Robot.controller0.getRawAxis(5) > 0.1 || Robot.controller0.getRawAxis(5) < -0.1){
-                    armExtend(Robot.controller0.getRawAxis(1) * 0.5); // JL, "* 0.5" halves speed for safety
+                    extendMotor.set(ControlMode.PercentOutput,Robot.controller0.getRawAxis(5) * 0.25); // JL, "* 0.5" halves speed for safety
+                    }else{
+                    extendMotor.set(ControlMode.PercentOutput, 0);
                     }
 
             break;

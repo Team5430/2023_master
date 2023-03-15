@@ -227,19 +227,49 @@ public int autoStatus = 0;
 
 
           break;
+  
       case kUTurnAuto:
        
           break;
-      case kLoopAuto:
+      case kLoopAuto: //basic autonomous
+      if(autoStatus == 0){
+      autoStatus = 1;
+      Gripper.gripperRetract();
+      for(int twice = 0; twice<2; twice++){
+        turn90Degrees("left"); // turn 180 degrees
+       }
+      driveInPower(0.3, 12.0);
+       s_timer.reset();
+       s_timer.start();
+       while(s_timer.get() < 3){ //program runs for 2 sec
+         Arm.seatMotors.set(ControlMode.PercentOutput, -0.1); //arm will go down
+      }
+      Gripper.gripperBite("cone");
+      for(int twice = 0; twice<2; twice++){
+        turn90Degrees("left"); // turn 180 degrees
+       }
+      driveInPower(0.3, 12.0);
+      s_timer.reset();
+      s_timer.start();
+      while(s_timer.get() < 3){ //program runs for 2 sec
+        Arm.seatMotors.set(ControlMode.PercentOutput, 0.1); //arm will go down
+     }
+     Gripper.gripperRetract();
+    }
+      
+
+      
+  
           break;
       case middleauto:
       if(autoStatus == 0){
+
       
       autoStatus = 1;
       s_timer.reset();
 
 
-       driveInPower(0.6, 15.0);//drive 10 feet for 5 seconds
+       driveInPower(0.1, 15.0);//drive 10 feet for 5 seconds
 
 
       }
@@ -251,20 +281,24 @@ public int autoStatus = 0;
       if(autoStatus == 0){
       autoStatus = 1;
        Gripper.gripperBite("cone");
+        Extend.armRetract(0.4);
+        for(int twice = 0; twice<2; twice++){
+          turn90Degrees("left"); // turn 180 degrees
+          }
         driveInPower(0.6, 10.0);
-      
         driveInPower(0.7, 10.0);
-      
-       Drive.driveTrain.tankDrive(0.0, 0.0);
+        driveInPower(0.7, 10.0);
+        Drive.driveTrain.tankDrive(0.0, 0.0); 
       }
+    }
 ;/*
       //Extend.armExtend(0.5);
       //insert rotate arm length 
         //Gripper.gripperBite(0.3);
      // Extend.armRetract(0.3);
    //   for(int twice = 0; twice<2; twice++){
-       //     turn90Degrees("left"); // turn 180 degrees
-       //   }
+          turn90Degrees("left"); // turn 180 degrees
+          }
    //   driveInMultiple(18.6666667, 1.0);
       turn90Degrees("right");
       driveInMultiple(16.6666667, 1.0);
@@ -293,7 +327,7 @@ public int autoStatus = 0;
     
     }
 
-  }
+  
 
   @Override
   public void teleopInit() {}

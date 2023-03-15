@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.Timer;
 
@@ -75,6 +76,8 @@ public class Gripper implements Runnable {
 //run() for testing gripping objects
     @Override
     public void run() {
+
+      gripperMotor.setNeutralMode(NeutralMode.Brake);
       
      while(loop==1){
                 if (mode == 1){ // JL, B-button Toggle mode, B will toggle between gripping and non-gripping
@@ -100,7 +103,9 @@ public class Gripper implements Runnable {
                 if (mode == 2){ // JL, Triggers Control mode, use triggers to manually reel gripper in/out
                      // JL, deadzone code, only allows input to gripperBite if input for either trigger is greater than 0.1
                     if(Robot.controller0.getRawAxis(2) > 0.1 || Robot.controller0.getRawAxis(3) > 0.1){
-                    gripperMotor.set(ControlMode.PercentOutput, (Robot.controller0.getRawAxis(3) - Robot.controller0.getRawAxis(2)) * 0.5); // JL, "* 0.5" halves speed for safety
+                    gripperMotor.set(ControlMode.PercentOutput, (Robot.controller0.getRawAxis(3) - Robot.controller0.getRawAxis(2)) * 0.35); // JL, "* 0.5" halves speed for safety
+                    }else{
+                      gripperMotor.set(ControlMode.PercentOutput, 0);
                     }
 
                     /* Jio's Guide on How to use Triggers Control Mode
