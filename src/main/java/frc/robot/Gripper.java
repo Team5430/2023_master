@@ -13,7 +13,7 @@ public class Gripper implements Runnable {
     // JL, mode will determine how input will work.  1 = B-button toggle, 2 = Triggers Control
     public static int mode = 2;
     // JL, stores whether the robot believes its (0) not gripping or (1) gripping.
-    public static String gripping = "letGo";
+    public static String gripping = "cube";
     //declare motor here
     static TalonSRX gripperMotor = new TalonSRX(Drive.motorPorts[7]);
 

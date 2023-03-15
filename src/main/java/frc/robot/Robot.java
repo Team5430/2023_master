@@ -43,7 +43,7 @@ private static final String kDefaultAuto = "Default";
 private static final String kUTurnAuto = "Uturn Auto";
 private static final String kLoopAuto = "Loop Auto";
 private static final String kPanic = "Panic Time";
-private static final String middleauto = "Middle";
+private static final String middleauto = "Middle Auto";
 private static final String shootdock = "Shoot and Dock";
 
 
@@ -94,7 +94,6 @@ public int autoStatus = 0;
       while(s_timer.get() < time){
         Drive.driveTrain.tankDrive(power, -power);
       }
-       Drive.driveTrain.tankDrive(0.0, 0.0);
     }
   
     public void driveInTime(double distance, double time){
@@ -248,13 +247,16 @@ public int autoStatus = 0;
           break;
       case shootdock:
       if(autoStatus == 0){
-      
+      Extend.armExtend(0.5);
+      if(autoStatus == 0){
       autoStatus = 1;
-     
-      driveInPower(0.6, 10.0);
-      Gripper.gripperBite("cone");
-      driveInPower(0.7, 10.0);
-
+       Gripper.gripperBite("cone");
+        driveInPower(0.6, 10.0);
+      
+        driveInPower(0.7, 10.0);
+      
+       Drive.driveTrain.tankDrive(0.0, 0.0);
+      }
 ;/*
       //Extend.armExtend(0.5);
       //insert rotate arm length 
