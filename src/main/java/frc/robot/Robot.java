@@ -42,9 +42,10 @@ public Thread gripper = new Thread(gripperRef);
 private static final String kDefaultAuto = "Default";
 private static final String kUTurnAuto = "Uturn Auto";
 private static final String kLoopAuto = "Loop Auto";
-private static final String kPanic = "Panic Time";
-private static final String middleauto = "Middle Auto";
-private static final String shootdock = "Shoot and Dock";
+private static final String kBluDockOnly = "Blue Dock Only";
+private static final String middleauto = "Middle Auto Position";
+private static final String shootdock = "Shoot and Dock Autonomous Option";
+private static final String kBluSubstation = "Blue Substation";
 
 
 private String m_autoSelected;
@@ -162,7 +163,7 @@ public int autoStatus = 0;
    Gripper.gripperMotor.set(ControlMode.PercentOutput, force); // ControlMode.PercentOutput basically tells next number 
    
  }
-
+https://prod.liveshare.vsengsaas.visualstudio.com/join?1B3FE6D9F5522AE95911CDDF902EB39AD588
 }
 */
   @Override
@@ -181,6 +182,7 @@ public int autoStatus = 0;
     m_chooser.addOption("Volt Switch", kUTurnAuto);
     m_chooser.addOption("Middle Position Auto", middleauto);
     m_chooser.addOption("Shoot and Dock Autonomous Option", shootdock);
+    m_chooser.addOption("Blue Dock Only", kBluDockOnly);
 
   }
 
@@ -290,6 +292,32 @@ public int autoStatus = 0;
        
         
     }
+        case kBluDockOnly:
+
+          if(autoStatus == 0){
+            autoStatus = 1;
+            Gripper.gripperRetract();
+            driveInMultiple(-2.5, 1);
+            turn90Degrees("right");
+            driveInMultiple(2.5, 1);
+            turn90Degrees("right");
+            driveInMultiple(2, 1);
+          }
+
+        break;
+
+        case kBluSubstation:
+
+          if(autoStatus == 0){
+            autoStatus = 1;
+            Gripper.gripperRetract();
+            driveInMultiple(-2.5, 1);
+            turn90Degrees("right");
+            turn90Degrees("right");
+            driveInMultiple(13.66, kDefaultPeriod);
+          }
+
+        break;
     
     }
 

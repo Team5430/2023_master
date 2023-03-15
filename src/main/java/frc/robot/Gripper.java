@@ -101,6 +101,8 @@ public class Gripper implements Runnable {
                      // JL, deadzone code, only allows input to gripperBite if input for either trigger is greater than 0.1
                     if(Robot.controller0.getRawAxis(2) > 0.1 || Robot.controller0.getRawAxis(3) > 0.1){
                     gripperMotor.set(ControlMode.PercentOutput, (Robot.controller0.getRawAxis(3) - Robot.controller0.getRawAxis(2)) * 0.5); // JL, "* 0.5" halves speed for safety
+                    }else{
+                      gripperMotor.set(ControlMode.PercentOutput, 0);
                     }
 
                     /* Jio's Guide on How to use Triggers Control Mode

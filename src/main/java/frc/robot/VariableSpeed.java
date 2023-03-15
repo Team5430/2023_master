@@ -5,16 +5,16 @@ public class VariableSpeed implements Runnable {
     @Override
     public void run() {
         while(true){
-        if(Robot.controller0.getPOV()  == 0 && multiplier != 1.0){
-            while(!(Robot.controller0.getPOV() ==-1) ){
+        if(Robot.joystickRight.getRawButton(2) && multiplier != 1.0){
+            while(!(Robot.joystickRight.getRawButton(2)) ){
 
             }
 multiplier += .2;
 
         }
         
-        if(Robot.controller0.getPOV()  == 180 && multiplier != .2){
-             while(!(Robot.controller0.getPOV() ==-1) ){
+        if(Robot.joystickLeft.getRawButton(2) && multiplier != 1.0){
+             while(!(Robot.joystickLeft.getRawButton(2)) ){
 
             }
             multiplier -= .2;
