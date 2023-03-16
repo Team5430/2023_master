@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
   private static final String middleauto = "Middle Auto Position";
   private static final String shootdock = "Shoot and Dock Autonomous Option";
   private static final String kBluSubstation = "Blue Substation";
+  private static final String kDriveInMultipleTest = "DriveInMultipleTest";
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -79,14 +80,19 @@ public class Robot extends TimedRobot {
   // 3.22, but the constant is changable
   // previously in the code. Larger multiple value means faster travel. Max
   // multiple should be 5. DO NOT GO PAST 5.
+
+   
   public void driveInMultiple(double distance, double multiple) {
+    // *** driveInMultiple currwntly not working *TESTED*
     s_timer.reset();
     s_timer.start();
-    while (s_timer.get() < distance / (speedConstant) * 2) {
+    System.out.println("Attempting to drive in multiple: " + distance + "," + multiple);
+    while (s_timer.get() < (distance / (speedConstant * multiple))) {
       Drive.driveTrain.tankDrive(0.2 * multiple, -0.2 * multiple);
     }
     Drive.driveTrain.tankDrive(0, 0);
   }
+  
 
   // Custom Jio code~ Essentially caluculates a velocity to travel using a
   // distance and time given.
@@ -94,6 +100,7 @@ public class Robot extends TimedRobot {
   // the trip.
   // Smaller time = Faster velocity
   public void driveInPower(double power, double time) {
+    // ***  Drive in power is working *TESTED*
     s_timer.reset();
     s_timer.start();
     while (s_timer.get() < time) {
@@ -119,10 +126,10 @@ public class Robot extends TimedRobot {
     while (s_timer.get() < 1) {
       switch (direction) {
         case "left":
-          Drive.driveTrain.tankDrive(-0.5, -0.5);
+          Drive.driveTrain.tankDrive(-0.6, -0.6);
           break;
         case "right":
-          Drive.driveTrain.tankDrive(0.5, 0.5);
+          Drive.driveTrain.tankDrive(0.3, 0.3);
           break;
       }
     }
@@ -147,6 +154,9 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Middle Position Auto", middleauto);
     m_chooser.addOption("Shoot and Dock Autonomous Option", shootdock);
     m_chooser.addOption("Blue Dock Only", kBluDockOnly);
+    m_chooser.addOption("Default", kDefaultAuto);
+    m_chooser.addOption("Blue Substation", kBluSubstation);
+    m_chooser.addOption("test", kDriveInMultipleTest);
 
   }
 
@@ -155,6 +165,7 @@ public class Robot extends TimedRobot {
 
     // updating the value from the encoder
     SmartDashboard.putNumber("Seat motor Values", Arm.position);
+    SmartDashboard.putNumber("Multiplier", VariableSpeed.getMultiplier());
 
   }
 
@@ -162,17 +173,18 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
 
     m_autoSelected = m_chooser.getSelected();
-
+    autoStatus = 0;
   }
 
   @Override
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
       case kDefaultAuto:
-
+    if (autoStatus == 0){
+      autoStatus = 1;
         System.out.println("Attempting to use Default Auto");
 
-        driveInMultiple(18.6666667, 1.0);// driveiintime method just moves in a straight line
+        driveInPower(0.5, 3);
           System.out.println("Working... 1");
         Extend.armExtend(0.3);
           System.out.println("yummy... 2");
@@ -193,14 +205,15 @@ public class Robot extends TimedRobot {
           System.out.println("For loop occuring:" + twice); // this one is supposed to be here
           turn90Degrees("left"); // turn 180 degrees
         } // changeable depending on how far we want the robot should be from the target
-        driveInMultiple(18.6666667, 1.0);
+        driveInPower(.5, 2);
          System.out.println("Drive in multiple issued...6");
         Extend.armExtend(0.5);
           System.out.println("Arm extend issued...7");
         // insert rotate arm length
         // Gripper.gripperBite(0.0); // opening the gripper by setting power of motor to
         // zero
-        System.out.println("I think I'm done now!");
+        System.out.println("I think I'm done now!"); 
+      }
         break;
 
       case kUTurnAuto:
@@ -211,6 +224,16 @@ public class Robot extends TimedRobot {
       case kLoopAuto: // basic autonomous
         if (autoStatus == 0) {
           autoStatus = 1;
+          Gripper.gripperBite("cone");
+          System.out.println("About to run arm for 3 seconds...5");
+
+          s_timer.reset();
+          s_timer.start();
+          while (s_timer.get() <6) { // program runs for 2 sec
+            Arm.seatMotors.set(ControlMode.PercentOutput, -0.8); // arm will go down
+          }
+          System.out.println("Working... 1");
+          Extend.armExtend(0.3);
            System.out.println("Retracting... 1");
           Gripper.gripperRetract();
           for (int twice = 0; twice < 2; twice++) {
@@ -218,13 +241,14 @@ public class Robot extends TimedRobot {
             turn90Degrees("left"); // turn 180 degrees
           }
           //Loop done
-          driveInPower(0.3, 12.0);
+          System.out.println("About to drive in power...7");
+          driveInPower(.5, 10.0);
             System.out.println("Drove in power...4");
           s_timer.reset();
           s_timer.start();
            System.out.println("About to run arm for 3 seconds...5");
-          while (s_timer.get() < 3) { // program runs for 2 sec
-            Arm.seatMotors.set(ControlMode.PercentOutput, -0.1); // arm will go down
+          while (s_timer.get() < 15) { // program runs for 2 sec
+            Arm.seatMotors.set(ControlMode.PercentOutput, -0.4); // arm will go down
           }
             System.out.println("Going to grip..6");
           Gripper.gripperBite("cone");
@@ -232,13 +256,13 @@ public class Robot extends TimedRobot {
           for (int twice = 0; twice < 2; twice++) {
             turn90Degrees("left"); // turn 180 degrees
           }
-            System.out.println("About to drive in power...7");
-          driveInPower(0.3, 12.0);
+           System.out.println("About to drive in power...7");
+          driveInPower(.5, 10.0);
           s_timer.reset();
           s_timer.start();
            System.out.println("About to run arm for 3 seconds...8");
-          while (s_timer.get() < 3) { // program runs for 2 sec
-            Arm.seatMotors.set(ControlMode.PercentOutput, 0.1); // arm will go down
+          while (s_timer.get() < 6) { // program runs for 2 sec
+            Arm.seatMotors.set(ControlMode.PercentOutput, 0.4); // arm will go down
           }
           Gripper.gripperRetract();
         }
@@ -251,7 +275,7 @@ public class Robot extends TimedRobot {
           autoStatus = 1;
           s_timer.reset();
               System.out.println("driving in powah");
-          driveInPower(0.1, 15.0);// drive 10 feet for 5 seconds
+          driveInPower(0.2, 5.0);
 
         }
 
@@ -292,15 +316,15 @@ public class Robot extends TimedRobot {
              System.out.println("Going to let go...1");
           Gripper.gripperRetract();
               System.out.println("Going to drive 2.5 feet backwards...2");
-          driveInMultiple(-2.5, 1);
+            driveInPower(.2, 1);
               System.out.println("Going to turn right...3");
           turn90Degrees("right");
               System.out.println("Going to drive 2.5 feet forwards...4");
-          driveInMultiple(2.5, 1);
+            driveInPower(.3, 2);
               System.out.println("Going to turn right...5");
           turn90Degrees("right");
               System.out.println("Going to drive 2 feet forwards...6");
-          driveInMultiple(2, 1);
+            driveInPower(.2, 5);
               System.out.println("Hooray! I finished!");
         }
       break;
@@ -313,22 +337,36 @@ public class Robot extends TimedRobot {
              System.out.println("Going to let go...1");
           Gripper.gripperRetract();
              System.out.println("Going to drive 2.5 feet backwards...2");
-          driveInMultiple(-2.5, 1);
+            driveInPower(0.5, 1);
              System.out.println("Going to turn right...3");
           turn90Degrees("right");
             System.out.println("Going to turn right again...4");
           turn90Degrees("right");
             System.out.println("Going to drive in muliple...5");
-          driveInMultiple(13.66, kDefaultPeriod);
+            driveInPower(0.1, 5);
             System.out.println("Peanut Butter Jelly Sandwiches!");
         }
       break;
 
+      case kDriveInMultipleTest:
+      if(autoStatus == 0){
+        autoStatus = 1;
+        System.out.println("Attempting to drive in multiple.");
+
+        driveInMultiple(10, 2);
+        System.out.println("Attempting to stop.");
+        Drive.driveTrain.tankDrive(0, 0);
+        System.out.println("Done");
+
+      
+      }
+      break;
     }
   }
 
   @Override
   public void teleopInit() {
+    Drive.driveTrain.tankDrive(0, 0);
   }
 
   @Override
