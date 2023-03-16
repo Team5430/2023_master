@@ -6,11 +6,15 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 /**
@@ -47,6 +51,10 @@ public class Robot extends TimedRobot {
   private static final String shootdock = "Shoot and Dock Autonomous Option";
   private static final String kBluSubstation = "Blue Substation";
   private static final String kDriveInMultipleTest = "DriveInMultipleTest";
+  private static final String kBlueSubstationCone = "Blue Substation Cone";
+  private static final String kDirectionalChecks = "Directional Checks";
+  private static final String kAdvancedRingAround = "Ring Around";
+  //private static final String k
 
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -55,6 +63,7 @@ public class Robot extends TimedRobot {
   public double maxSpeed = 16.4;
 
   public int autoStatus = 0;
+  
 
   // joysticks
   public static Joystick joystickLeft = new Joystick(1);
@@ -124,16 +133,63 @@ public class Robot extends TimedRobot {
     s_timer.reset();
     s_timer.start();
     while (s_timer.get() < 1) {
+      
       switch (direction) {
         case "left":
-          Drive.driveTrain.tankDrive(-0.6, -0.6);
+          Drive.driveTrain.tankDrive(-0.50, -0.50);
           break;
         case "right":
-          Drive.driveTrain.tankDrive(0.3, 0.3);
+          Drive.driveTrain.tankDrive(0.45, 0.45);
           break;
       }
     }
     Drive.driveTrain.tankDrive(0, 0);
+  }
+
+  /* JL, Documentation on the doc. To adress the issue about how the same autom code will not work for both 
+  alliances (for reference, a code starting off flush with grid, turning left, and driving forward will 
+  result in the robot being either closer (Blue) or farther (Red) from the loading zone depending on the 
+  alliance the robot is on), I created a new function called turn90DegreesAdvanced, which will literally 
+  take the alliance it is on when the DS is plugged in and make the turn properly match the corresponding 
+  autom. The ref point should always be Blue Alliance, as all of our auto plans are based off of starting 
+  on Blue. 
+ */
+
+  public void turn90DegreesAdvanced(String direction) {
+    s_timer.reset();
+    s_timer.start();
+    while (s_timer.get() < .5) {
+      
+      switch (direction) {
+        case "left":
+        if(DriverStation.getAlliance() == Alliance.Blue){
+          Drive.driveTrain.tankDrive(-0.6, -0.6);
+          break;
+        }else{
+          Drive.driveTrain.tankDrive(0.6, 0.6);
+          break;
+        }
+        case "right":
+        if(DriverStation.getAlliance() == Alliance.Blue){
+          Drive.driveTrain.tankDrive(0.6, 0.6);
+          break;
+        }else{
+          Drive.driveTrain.tankDrive(-0.6, -0.6);
+          break;
+        }
+      }
+    }
+    Drive.driveTrain.tankDrive(0, 0);
+  }
+
+  public void turnArm(double time, double speed){
+
+    s_timer.reset();
+    s_timer.start();
+    while (s_timer.get() < time){
+      Arm.seatMotors.set(ControlMode.PercentOutput, speed);
+    }
+    Arm.seatMotors.set(ControlMode.PercentOutput, 0);
   }
  
    
@@ -157,6 +213,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Default", kDefaultAuto);
     m_chooser.addOption("Blue Substation", kBluSubstation);
     m_chooser.addOption("test", kDriveInMultipleTest);
+    m_chooser.addOption("Directional Checks", kDirectionalChecks);
+    m_chooser.addOption("Advanced Ring Around", kAdvancedRingAround);
 
   }
 
@@ -229,13 +287,19 @@ public class Robot extends TimedRobot {
 
           s_timer.reset();
           s_timer.start();
-          while (s_timer.get() <6) { // program runs for 2 sec
+          while (s_timer.get() < 6) { // program runs for 2 sec
             Arm.seatMotors.set(ControlMode.PercentOutput, -0.8); // arm will go down
           }
           System.out.println("Working... 1");
-          Extend.armExtend(0.3);
+          Extend.armExtend(0.5);
            System.out.println("Retracting... 1");
           Gripper.gripperRetract();
+          s_timer.reset();
+          s_timer.start();
+          while (s_timer.get() < 6) { // program runs for 2 sec
+            Arm.seatMotors.set(ControlMode.PercentOutput, -0.8); // arm will go down
+          }
+          System.out.println("LLLL"); //Ethan was here when he stopped.
           for (int twice = 0; twice < 2; twice++) {
             System.out.println("Attempting to turn 180:" + twice);
             turn90Degrees("left"); // turn 180 degrees
@@ -247,7 +311,7 @@ public class Robot extends TimedRobot {
           s_timer.reset();
           s_timer.start();
            System.out.println("About to run arm for 3 seconds...5");
-          while (s_timer.get() < 15) { // program runs for 2 sec
+          while (s_timer.get() < 6) { // program runs for 2 sec
             Arm.seatMotors.set(ControlMode.PercentOutput, -0.4); // arm will go down
           }
             System.out.println("Going to grip..6");
@@ -257,12 +321,12 @@ public class Robot extends TimedRobot {
             turn90Degrees("left"); // turn 180 degrees
           }
            System.out.println("About to drive in power...7");
-          driveInPower(.5, 10.0);
+          driveInPower(.5, 3);
           s_timer.reset();
           s_timer.start();
            System.out.println("About to run arm for 3 seconds...8");
           while (s_timer.get() < 6) { // program runs for 2 sec
-            Arm.seatMotors.set(ControlMode.PercentOutput, 0.4); // arm will go down
+            Arm.seatMotors.set(ControlMode.PercentOutput, 0.8); // arm will go down
           }
           Gripper.gripperRetract();
         }
@@ -310,43 +374,45 @@ public class Robot extends TimedRobot {
       break;
 
       case kBluDockOnly:
-            System.out.println("Attempting to BluDockOnly");
+        System.out.println("Attempting to BluDockOnly");
         if (autoStatus == 0) {
           autoStatus = 1;
-             System.out.println("Going to let go...1");
+          System.out.println("Going to let go...1");
           Gripper.gripperRetract();
-              System.out.println("Going to drive 2.5 feet backwards...2");
-            driveInPower(.2, 1);
-              System.out.println("Going to turn right...3");
+          System.out.println("Going to drive 2.5 feet backwards...2");
+          driveInPower(.2, 1);
+          System.out.println("Going to turn right...3");
           turn90Degrees("right");
-              System.out.println("Going to drive 2.5 feet forwards...4");
-            driveInPower(.3, 2);
-              System.out.println("Going to turn right...5");
+          System.out.println("Going to drive 2.5 feet forwards...4");
+          driveInPower(.3, 2);
+          System.out.println("Going to turn right...5");
           turn90Degrees("right");
-              System.out.println("Going to drive 2 feet forwards...6");
-            driveInPower(.2, 5);
-              System.out.println("Hooray! I finished!");
+          System.out.println("Going to drive 2 feet forwards...6");
+          driveInPower(.2, 5);
+          System.out.println("Hooray! I finished!");
         }
       break;
 
       case kBluSubstation:
-
-        if (autoStatus == 0) {
-             System.out.println("Attempting to BlueSubStation");
+      System.out.println("Attempting to BlueSubStation");
+        if (autoStatus == 0){
           autoStatus = 1;
-             System.out.println("Going to let go...1");
+          Gripper.gripperBite("cone");
+          System.out.println("Going to let go...1");
           Gripper.gripperRetract();
-             System.out.println("Going to drive 2.5 feet backwards...2");
-            driveInPower(0.5, 1);
-             System.out.println("Going to turn right...3");
+          System.out.println("Going to drive 2.5 feet backwards...2");
+          driveInPower(0.5, 1);
+          System.out.println("Going to turn right...3");
           turn90Degrees("right");
-            System.out.println("Going to turn right again...4");
+          System.out.println("Going to turn right again...4");
           turn90Degrees("right");
-            System.out.println("Going to drive in muliple...5");
-            driveInPower(0.1, 5);
-            System.out.println("Peanut Butter Jelly Sandwiches!");
+          System.out.println("Going to drive in muliple...5");
+          driveInPower(0.1, 5);
+          System.out.println("Peanut Butter Jelly Sandwiches!");
         }
       break;
+
+      
 
       case kDriveInMultipleTest:
       if(autoStatus == 0){
@@ -361,6 +427,46 @@ public class Robot extends TimedRobot {
       
       }
       break;
+
+      case kDirectionalChecks:
+      if(autoStatus == 0){
+        autoStatus = 1;
+        System.out.println("Directional checks!");
+        System.out.println("Turning left! (-0.6, -0.6)");
+        turn90Degrees("left"); 
+        System.out.println("Turning right! (0.6, 0.6)");
+        turn90Degrees("right");
+        System.out.println("Driving forward! (+, -)");
+        driveInPower(0.4, 1);
+        System.out.println("Driving backward! (-, +)");
+        driveInPower(-0.4, 1);
+        System.out.println("Donesies! Order should have been: Left, Right, Forward, Backward.");
+      
+      }
+      break;
+
+      case kAdvancedRingAround:
+
+      System.out.println("Attempting Advanced Ring Around");
+      if(autoStatus == 0){
+        autoStatus = 1;
+        Gripper.gripperBite("cube");
+        //driveInPower(0, 2);
+        turnArm(2, 0.8);
+        Gripper.gripperRetract();
+        Extend.armRetract(0.35);
+        turnArm(4, 0.8);
+        driveInMultiple(15, 3);
+        Gripper.gripperBite("cube");
+        turn90DegreesAdvanced("left");
+        driveInMultiple(7, 3);
+        turn90DegreesAdvanced("left");
+        driveInMultiple(10, 4);
+      }
+
+      break;
+
+
     }
   }
 

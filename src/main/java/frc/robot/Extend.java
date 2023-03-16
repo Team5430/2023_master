@@ -66,6 +66,7 @@ public class Extend implements Runnable {
   public void run() {
 
     extendMotor.setNeutralMode(NeutralMode.Brake);
+    extendMotor.enableVoltageCompensation(true);
 
     while (loop == 1) {
       switch (mode) {

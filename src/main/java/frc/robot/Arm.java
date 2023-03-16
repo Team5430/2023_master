@@ -83,6 +83,8 @@ public class Arm implements Runnable {
 
     public void run() {
 
+        seatMotors.enableVoltageCompensation(true);
+
         while (loop) {
             position = motorCounter.getDistance();
             // if not auton then,
