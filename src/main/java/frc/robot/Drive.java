@@ -49,6 +49,9 @@ public class Drive implements Runnable{
     public static double power2 = 0;
   
     public void run() {
+
+
+
       //frontRightMotor.setInverted(true);
       //while teleop is looping
       while (loop) {

@@ -27,7 +27,7 @@ public class Gripper implements Runnable {
        if (object == "cone"){
           while(s_timer.get() < 1){
   
-           gripperMotor.set(ControlMode.PercentOutput, 0.25); // ControlMode.PercentOutput basically tells next number 
+           gripperMotor.set(ControlMode.PercentOutput, 0.5); // ControlMode.PercentOutput basically tells next number 
            
           }
           gripperMotor.set(ControlMode.PercentOutput, 0);
@@ -51,7 +51,7 @@ public class Gripper implements Runnable {
       if(gripping == "cone"){
         while(s_timer.get() < 1){
 
-          gripperMotor.set(ControlMode.PercentOutput, -0.25); // ControlMode.PercentOutput basically tells next number 
+          gripperMotor.set(ControlMode.PercentOutput, -0.5); // ControlMode.PercentOutput basically tells next number 
         }
         gripperMotor.set(ControlMode.PercentOutput, 0);
         gripping = "letGo";
@@ -78,6 +78,7 @@ public class Gripper implements Runnable {
     public void run() {
 
       gripperMotor.setNeutralMode(NeutralMode.Brake);
+      gripperMotor.enableVoltageCompensation(true);
       
      while(loop==1){
                 if (mode == 1){ // JL, B-button Toggle mode, B will toggle between gripping and non-gripping
