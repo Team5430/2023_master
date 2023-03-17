@@ -205,16 +205,17 @@ public class Robot extends TimedRobot {
 
     // Puts auto list onto Shuffleboard
     SmartDashboard.putData("Auton Choice", m_chooser);
+    
     m_chooser.addOption("Loop Auto", kLoopAuto);
-    m_chooser.addOption("Volt Switch", kUTurnAuto);
+   // m_chooser.addOption("Volt Switch", kUTurnAuto);
     m_chooser.addOption("Middle Position Auto", middleauto);
     m_chooser.addOption("Shoot and Dock Autonomous Option", shootdock);
-    m_chooser.addOption("Blue Dock Only", kBluDockOnly);
+   // m_chooser.addOption("Blue Dock Only", kBluDockOnly);
     m_chooser.addOption("Default", kDefaultAuto);
-    m_chooser.addOption("Blue Substation", kBluSubstation);
-    m_chooser.addOption("test", kDriveInMultipleTest);
-    m_chooser.addOption("Directional Checks", kDirectionalChecks);
-    m_chooser.addOption("Advanced Ring Around", kAdvancedRingAround);
+   // m_chooser.addOption("Blue Substation", kBluSubstation);
+   // m_chooser.addOption("test", kDriveInMultipleTest);
+   // m_chooser.addOption("Directional Checks", kDirectionalChecks);
+   // m_chooser.addOption("Advanced Ring Around", kAdvancedRingAround);
 
   }
 
@@ -241,8 +242,11 @@ public class Robot extends TimedRobot {
     if (autoStatus == 0){
       autoStatus = 1;
         System.out.println("Attempting to use Default Auto");
-
-        driveInPower(0.5, 3);
+      s_timer.reset();
+      s_timer.start();
+        while(s_timer.get() < 2.5){
+          Arm.seatMotors.set(ControlMode.PercentOutput, 0.5);
+        }
           System.out.println("Working... 1");
         Extend.armExtend(0.3);
           System.out.println("yummy... 2");
@@ -257,7 +261,12 @@ public class Robot extends TimedRobot {
          *
          *
          **/
-        Extend.armRetract(0.3);
+        Extend.armRetract(0.35);
+        s_timer.reset();
+        s_timer.restart();
+        while(s_timer.get() < 2.5){
+        Arm.seatMotors.set(ControlMode.PercentOutput, -0.5);
+      }
           System.out.println("Attempted to Retract arm...3");
         for (int twice = 0; twice < 2; twice++) {
           System.out.println("For loop occuring:" + twice); // this one is supposed to be here
@@ -279,16 +288,14 @@ public class Robot extends TimedRobot {
         System.out.println("EMOLGA, use Volt Switch! It doesn't affect the opposing BOLDORE!");
 
         break;
-      case kLoopAuto: // basic autonomous
+      case kLoopAuto: 
         if (autoStatus == 0) {
           autoStatus = 1;
-          Gripper.gripperBite("cone");
-          System.out.println("About to run arm for 3 seconds...5");
-
+          
           s_timer.reset();
           s_timer.start();
-          while (s_timer.get() < 6) { // program runs for 2 sec
-            Arm.seatMotors.set(ControlMode.PercentOutput, -0.8); // arm will go down
+          while (s_timer.get() < 3) { // program runs for 2 sec
+            Arm.seatMotors.set(ControlMode.PercentOutput, 0.5); // arm will go down
           }
           System.out.println("Working... 1");
           Extend.armExtend(0.5);
@@ -296,8 +303,8 @@ public class Robot extends TimedRobot {
           Gripper.gripperRetract();
           s_timer.reset();
           s_timer.start();
-          while (s_timer.get() < 6) { // program runs for 2 sec
-            Arm.seatMotors.set(ControlMode.PercentOutput, -0.8); // arm will go down
+          while (s_timer.get() < 3) { // program runs for 2 sec
+            Arm.seatMotors.set(ControlMode.PercentOutput, -0.5); // arm will go down
           }
           System.out.println("LLLL"); //Ethan was here when he stopped.
           for (int twice = 0; twice < 2; twice++) {
@@ -306,29 +313,9 @@ public class Robot extends TimedRobot {
           }
           //Loop done
           System.out.println("About to drive in power...7");
-          driveInPower(.5, 10.0);
+          driveInPower(.5, 5.0);
             System.out.println("Drove in power...4");
-          s_timer.reset();
-          s_timer.start();
-           System.out.println("About to run arm for 3 seconds...5");
-          while (s_timer.get() < 6) { // program runs for 2 sec
-            Arm.seatMotors.set(ControlMode.PercentOutput, -0.4); // arm will go down
-          }
-            System.out.println("Going to grip..6");
-          Gripper.gripperBite("cone");
-            System.out.println("About to rotate twice...6");
-          for (int twice = 0; twice < 2; twice++) {
-            turn90Degrees("left"); // turn 180 degrees
-          }
-           System.out.println("About to drive in power...7");
-          driveInPower(.5, 3);
-          s_timer.reset();
-          s_timer.start();
-           System.out.println("About to run arm for 3 seconds...8");
-          while (s_timer.get() < 6) { // program runs for 2 sec
-            Arm.seatMotors.set(ControlMode.PercentOutput, 0.8); // arm will go down
-          }
-          Gripper.gripperRetract();
+
         }
 
       break;
@@ -347,26 +334,29 @@ public class Robot extends TimedRobot {
       case shootdock:
         System.out.println("Going to attempt shootdock");
         if (autoStatus == 0) {
+          s_timer.reset();
+          s_timer.start();
+            while(s_timer.get() < 3){
+              Arm.seatMotors.set(ControlMode.PercentOutput, 0.5);
+            }
              System.out.println("About to extend...1");
           Extend.armExtend(0.5);
           if (autoStatus == 0) {
             autoStatus = 1;
-              System.out.println("biting cone..2");
-            Gripper.gripperBite("cone");
               System.out.println("eating food!!...3");
-            Extend.armRetract(0.4);
+            Extend.armRetract(0.53);
+          s_timer.reset();
+          s_timer.start();
+            while(s_timer.get() < 3){
+              Arm.seatMotors.set(ControlMode.PercentOutput, -0.5);
+            }
                System.out.println("Going to turn left twice...4+5");
             for (int twice = 0; twice < 2; twice++) 
             {
               turn90Degrees("left"); // turn 180 degrees
             }
                System.out.println("Going to drive in power...6");
-            driveInPower(0.6, 10.0);
-               System.out.println("Going to drive in power again...7");
-            driveInPower(0.7, 10.0);
-               System.out.println("Going to drive in power again AGAIN...8");
-            driveInPower(0.7, 10.0);
-               System.out.println("Stopping tank drive!");
+            driveInPower(0.6, 5.0);
             Drive.driveTrain.tankDrive(0.0, 0.0);
                System.out.println("Whomst've'dk'tve'ya'wro'rea'fga?");
           }
