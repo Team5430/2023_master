@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
   private static final String shootdock = "Shoot and Dock Autonomous Option";
   private static final String kBluSubstation = "Blue Substation";
   private static final String kDriveInMultipleTest = "DriveInMultipleTest";
-  private static final String kBlueSubstationCone = "Blue Substation Cone";
+ // private static final String kBlueSubstationCone = "Blue Substation Cone";
   private static final String kDirectionalChecks = "Directional Checks";
   private static final String kAdvancedRingAround = "Ring Around";
   //private static final String k
@@ -359,7 +359,7 @@ public class Robot extends TimedRobot {
               Arm.seatMotors.set(ControlMode.PercentOutput, 0.9);
             }
                System.out.println("Going to drive in power...6");
-            driveInPower(0.6, 5.0);
+            driveInPower(0.6, 3.5);
             Drive.driveTrain.tankDrive(0.0, 0.0);
                System.out.println("Whomst've'dk'tve'ya'wro'rea'fga?");
                autoStatus = 1;
