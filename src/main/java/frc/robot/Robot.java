@@ -340,6 +340,7 @@ public class Robot extends TimedRobot {
       case shootdock:
         System.out.println("Going to attempt shootdock");
         if (autoStatus == 0) {
+          Gripper.gripperBite("cube");
           s_timer.reset();
           s_timer.start();
             while(s_timer.get() < 3){
