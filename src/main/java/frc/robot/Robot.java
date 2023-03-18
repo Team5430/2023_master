@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -233,6 +232,13 @@ public class Robot extends TimedRobot {
 
     m_autoSelected = m_chooser.getSelected();
     autoStatus = 0;
+    
+    switch (m_autoSelected){
+      case middleauto:
+        System.out.println("driving in powah");
+        driveInPower(0.5, 3.0);
+        break;
+    }
   }
 
   @Override
@@ -240,12 +246,11 @@ public class Robot extends TimedRobot {
     switch (m_autoSelected) {
       case kDefaultAuto:
     if (autoStatus == 0){
-      autoStatus = 1;
         System.out.println("Attempting to use Default Auto");
       s_timer.reset();
       s_timer.start();
         while(s_timer.get() < 2.5){
-          Arm.seatMotors.set(ControlMode.PercentOutput, 0.5);
+          Arm.seatMotors.set(ControlMode.PercentOutput, -0.9);
         }
           System.out.println("Working... 1");
         Extend.armExtend(0.3);
@@ -265,7 +270,7 @@ public class Robot extends TimedRobot {
         s_timer.reset();
         s_timer.restart();
         while(s_timer.get() < 2.5){
-        Arm.seatMotors.set(ControlMode.PercentOutput, -0.5);
+        Arm.seatMotors.set(ControlMode.PercentOutput, 0.9);
       }
           System.out.println("Attempted to Retract arm...3");
         for (int twice = 0; twice < 2; twice++) {
@@ -280,6 +285,8 @@ public class Robot extends TimedRobot {
         // Gripper.gripperBite(0.0); // opening the gripper by setting power of motor to
         // zero
         System.out.println("I think I'm done now!"); 
+        autoStatus = 1;
+
       }
         break;
 
@@ -290,12 +297,11 @@ public class Robot extends TimedRobot {
         break;
       case kLoopAuto: 
         if (autoStatus == 0) {
-          autoStatus = 1;
           
           s_timer.reset();
           s_timer.start();
           while (s_timer.get() < 3) { // program runs for 2 sec
-            Arm.seatMotors.set(ControlMode.PercentOutput, 0.5); // arm will go down
+            Arm.seatMotors.set(ControlMode.PercentOutput, 0.9); // arm will go down
           }
           System.out.println("Working... 1");
           Extend.armExtend(0.5);
@@ -304,7 +310,7 @@ public class Robot extends TimedRobot {
           s_timer.reset();
           s_timer.start();
           while (s_timer.get() < 3) { // program runs for 2 sec
-            Arm.seatMotors.set(ControlMode.PercentOutput, -0.5); // arm will go down
+            Arm.seatMotors.set(ControlMode.PercentOutput, -0.9); // arm will go down
           }
           System.out.println("LLLL"); //Ethan was here when he stopped.
           for (int twice = 0; twice < 2; twice++) {
@@ -315,50 +321,49 @@ public class Robot extends TimedRobot {
           System.out.println("About to drive in power...7");
           driveInPower(.5, 5.0);
             System.out.println("Drove in power...4");
+            autoStatus = 1;
+
 
         }
 
       break;
-      case middleauto:
-        System.out.println("Attempting middleauto");
-        if (autoStatus == 0) {
-
-          autoStatus = 1;
-          s_timer.reset();
+     // case middleauto:
+       // System.out.println("Attempting middleauto");
+        /*if (autoStatus == 0) {
               System.out.println("driving in powah");
-          driveInPower(0.2, 5.0);
+          driveInPower(0.5, 3.0);
+          autoStatus = 1;
+        }*/
 
-        }
-
-        break;
+     //   break; 
+     
       case shootdock:
         System.out.println("Going to attempt shootdock");
         if (autoStatus == 0) {
           s_timer.reset();
           s_timer.start();
             while(s_timer.get() < 3){
-              Arm.seatMotors.set(ControlMode.PercentOutput, 0.5);
+              Arm.seatMotors.set(ControlMode.PercentOutput, -0.9);
             }
              System.out.println("About to extend...1");
           Extend.armExtend(0.5);
+          Gripper.gripping = "cone";
+            Gripper.gripperRetract();
+            Gripper.gripperBite("cone");
           if (autoStatus == 0) {
-            autoStatus = 1;
               System.out.println("eating food!!...3");
             Extend.armRetract(0.53);
           s_timer.reset();
           s_timer.start();
             while(s_timer.get() < 3){
-              Arm.seatMotors.set(ControlMode.PercentOutput, -0.5);
-            }
-               System.out.println("Going to turn left twice...4+5");
-            for (int twice = 0; twice < 2; twice++) 
-            {
-              turn90Degrees("left"); // turn 180 degrees
+              Arm.seatMotors.set(ControlMode.PercentOutput, 0.9);
             }
                System.out.println("Going to drive in power...6");
             driveInPower(0.6, 5.0);
             Drive.driveTrain.tankDrive(0.0, 0.0);
                System.out.println("Whomst've'dk'tve'ya'wro'rea'fga?");
+               autoStatus = 1;
+
           }
         }
       break;
@@ -386,7 +391,6 @@ public class Robot extends TimedRobot {
       case kBluSubstation:
       System.out.println("Attempting to BlueSubStation");
         if (autoStatus == 0){
-          autoStatus = 1;
           Gripper.gripperBite("cone");
           System.out.println("Going to let go...1");
           Gripper.gripperRetract();
@@ -399,6 +403,8 @@ public class Robot extends TimedRobot {
           System.out.println("Going to drive in muliple...5");
           driveInPower(0.1, 5);
           System.out.println("Peanut Butter Jelly Sandwiches!");
+          autoStatus = 1;
+
         }
       break;
 
