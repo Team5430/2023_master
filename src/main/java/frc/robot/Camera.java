@@ -8,7 +8,7 @@ import org.photonvision.PhotonCamera;
 public class Camera implements Runnable {
     public static PhotonCamera camera = new PhotonCamera("LED_ringCamera");
 
-    private boolean loop = true;
+    private boolean loop = false;
     // Constants such as camera and target height stored. Change per robot and goal!
     final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
     final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);

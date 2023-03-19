@@ -34,8 +34,8 @@ public class Robot extends TimedRobot {
   Arm armRef = new Arm();
   public Thread arm = new Thread(armRef);
   private Thread speedSafety = new Thread(safety);
-  Camera cameraRef = new Camera();
-  public Thread camera = new Thread(cameraRef);
+ // Camera cameraRef = new Camera();
+ // public Thread camera = new Thread(cameraRef);
   Extend extendRef = new Extend();
   public Thread extend = new Thread(extendRef);
   Gripper gripperRef = new Gripper();
@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
  // private static final String kBlueSubstationCone = "Blue Substation Cone";
   private static final String kDirectionalChecks = "Directional Checks";
   private static final String kAdvancedRingAround = "Ring Around";
+  private static final String kstayStill = "stay still";
   //private static final String k
 
   private String m_autoSelected;
@@ -198,7 +199,7 @@ public class Robot extends TimedRobot {
     drive.start();
     speedSafety.start();
     arm.start();
-    camera.start();
+ //   camera.start();
     gripper.start();
     extend.start();
 
@@ -209,6 +210,7 @@ public class Robot extends TimedRobot {
    // m_chooser.addOption("Volt Switch", kUTurnAuto);
     m_chooser.addOption("Middle Position Auto", middleauto);
     m_chooser.addOption("Shoot and Dock Autonomous Option", shootdock);
+    m_chooser.addOption("Stay Still", kstayStill);
    // m_chooser.addOption("Blue Dock Only", kBluDockOnly);
     m_chooser.addOption("Default", kDefaultAuto);
    // m_chooser.addOption("Blue Substation", kBluSubstation);
@@ -348,19 +350,26 @@ public class Robot extends TimedRobot {
             }
              System.out.println("About to extend...1");
           Extend.armExtend(0.5);
-          Gripper.gripping = "cone";
-            Gripper.gripperRetract();
-            Gripper.gripperBite("cone");
+          s_timer.reset();
+          s_timer.restart();
+          while(s_timer.get() < 1.2){
+            Gripper.gripperMotor.set(ControlMode.PercentOutput, -0.7);
+          }
+          s_timer.reset();
+          s_timer.restart();
+          while(s_timer.get() < 1){
+            Gripper.gripperMotor.set(ControlMode.PercentOutput, 0.7);
+          }
           if (autoStatus == 0) {
               System.out.println("eating food!!...3");
             Extend.armRetract(0.53);
           s_timer.reset();
           s_timer.start();
             while(s_timer.get() < 3){
-              Arm.seatMotors.set(ControlMode.PercentOutput, 0.9);
+              Arm.seatMotors.set(ControlMode.PercentOutput, 0.81);
             }
                System.out.println("Going to drive in power...6");
-            driveInPower(0.6, 3.5);
+            driveInPower(0.6, 2.5);
             Drive.driveTrain.tankDrive(0.0, 0.0);
                System.out.println("Whomst've'dk'tve'ya'wro'rea'fga?");
                autoStatus = 1;
@@ -368,6 +377,9 @@ public class Robot extends TimedRobot {
           }
         }
       break;
+
+      case kstayStill:
+      break; 
 
       case kBluDockOnly:
         System.out.println("Attempting to BluDockOnly");

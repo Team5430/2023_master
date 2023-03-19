@@ -9,7 +9,7 @@ public class VariableSpeed implements Runnable {
             while((Robot.joystickRight.getRawButton(3)) ){
 
             }
-multiplier += .33;
+multiplier += .1;
 
         }
         
@@ -17,7 +17,7 @@ multiplier += .33;
              while((Robot.joystickLeft.getRawButton(3)) ){
 
             }
-            multiplier -= .33;
+            multiplier -= .1;
             
                     }
     }

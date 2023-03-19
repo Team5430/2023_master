@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Arm implements Runnable {
 
@@ -18,6 +19,8 @@ public class Arm implements Runnable {
     Counter motorCounter = new Counter(new DigitalInput(1));
 
     static TalonSRX seatMotors = new TalonSRX(6);
+    
+    public static Timer a_timer  = new Timer();
 
     public static void setSeatMotors(TalonSRX seatMotors) {
         Arm.seatMotors = seatMotors;
@@ -80,15 +83,18 @@ public class Arm implements Runnable {
     double kD = 1;
     double armPos = 0;
     public static double position;
+    public static double time1 = 0.3;
 
     public void run() {
-
+         
         seatMotors.enableVoltageCompensation(true);
 
         while (loop) {
             position = motorCounter.getDistance();
             // if not auton then,
             if (!auton) {
+            
+        
                 // is the left Y axis being moved up or down?
                 if (Robot.controller0.getRawAxis(1) > 0.1
                         ||
@@ -99,8 +105,8 @@ public class Arm implements Runnable {
                 } else {
                     seatMotors.set(ControlMode.PercentOutput, 0);
 
-                }
-
+                
+            }
             }
         }
 
