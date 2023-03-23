@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import frc.robot.C.Drivestyle;
 
 //imports functions from java libaries
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
@@ -47,7 +48,12 @@ public class Drive implements Runnable{
     final int units = 2048;
     public static double power1 = 0;
     public static double power2 = 0;
+    public boolean isChezy = true;
   
+//New constructors 
+    public DriveStyle m_drivestyle = new DriveStyle();
+
+
     public void run() {
 
 
@@ -58,25 +64,46 @@ public class Drive implements Runnable{
      
         if (!auton) { //if not auton
   
-         
-          if ((Robot.joystickLeft.getRawAxis(1) > .02) || Robot.joystickLeft.getRawAxis(1) < -.02 //if there is input over 0.02 on the left joystick
+
+          if (isChezy) {
+          //call chezy here
+          m_drivestyle.cheesyDrive(Robot.joystickLeft.getRawAxis(1),Robot.joystickRight.getRawAxis(2)); //Throttle on left vertical (1), wheel on right horizontal (2)
+          //the drivestyle subclass does its work, then we pull the values it just generated into the driveTrain to set leftright 
+          driveTrain.tankDrive(m_drivestyle.getLeftPower() * VariableSpeed.getMultiplier(),m_drivestyle.getRightPower() * VariableSpeed.getMultiplier());
+          }
+
+          else { //call original 5430 drive code
+
+
+
+
+            if ((Robot.joystickLeft.getRawAxis(1) > .02) || Robot.joystickLeft.getRawAxis(1) < -.02 //if there is input over 0.02 on the left joystick
               || Robot.joystickRight.getRawAxis(1) > .02 || Robot.joystickRight.getRawAxis(1) < -.02) { //or the right stick
                  _timer.start(); //start the timer
                 if(_timer.get() > .5){ //if the timer is greater than .5 seconds
                     _timer.stop(); //stop the timer
                        }          
-            driveTrain.tankDrive(-(Robot.joystickLeft.getRawAxis(1)  * VariableSpeed.getMultiplier() /*_timer.get()*2  */ ) ,(Robot.joystickRight.getRawAxis(1) * VariableSpeed.getMultiplier() * 1.05 /*_timer.get()*2 */ )); //drive train takes inputs from joystick and multiplies by two as well as the timer, creating a smoothing system
-          } else { //if there is not input
+             driveTrain.tankDrive(-(Robot.joystickLeft.getRawAxis(1)  * VariableSpeed.getMultiplier() /*_timer.get()*2  */ ) ,(Robot.joystickRight.getRawAxis(1) * VariableSpeed.getMultiplier() * 1.05 /*_timer.get()*2 */ )); //drive train takes inputs from joystick and multiplies by two as well as the timer, creating a smoothing system
+            } else { //if there is not input
             driveTrain.tankDrive(0, 0); //set both sides to 0
             _timer.reset(); //reset the smoothing timer
             // System.out.println("check"); */
+            }
           }
-        } else {
+
+        } else { //In Auto, set the drivetrain to 0 power
           driveTrain.tankDrive(power1, power2);
           // System.out.println("check");
         }
-  
+      
+      
     
         }
-    } 
+    }
+    
+    //Subclasses for Chezy drive
+    //This function lets us make a button binding elsewhere to turn on or off the halo drive 
+    public void setChezy(boolean isChezy) {
+        this.isChezy = isChezy;
+    }
 }
