@@ -75,6 +75,11 @@ public class Robot extends TimedRobot {
 
   public static Timer s_timer = new Timer();
 
+  public void rebootTimer(){
+   s_timer.reset();
+   s_timer.start();
+  }
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -93,8 +98,7 @@ public class Robot extends TimedRobot {
    
   public void driveInMultiple(double distance, double multiple) {
     // *** driveInMultiple currwntly not working *TESTED*
-    s_timer.reset();
-    s_timer.start();
+    rebootTimer();
     System.out.println("Attempting to drive in multiple: " + distance + "," + multiple);
     while (s_timer.get() < (distance / (speedConstant * multiple))) {
       Drive.driveTrain.tankDrive(0.2 * multiple, -0.2 * multiple);
@@ -110,8 +114,7 @@ public class Robot extends TimedRobot {
   // Smaller time = Faster velocity
   public void driveInPower(double power, double time) {
     // ***  Drive in power is working *TESTED*
-    s_timer.reset();
-    s_timer.start();
+    rebootTimer();
     while (s_timer.get() < time) {
       Drive.driveTrain.tankDrive(power, -power);
     }
@@ -119,8 +122,7 @@ public class Robot extends TimedRobot {
   }
 
   public void driveInTime(double distance, double time) {
-    s_timer.reset();
-    s_timer.start();
+    rebootTimer();
     while (s_timer.get() < time) {
       Drive.driveTrain.tankDrive((distance / time) / maxSpeed, -(distance / time) / maxSpeed);
     }
@@ -130,8 +132,7 @@ public class Robot extends TimedRobot {
   // Custom Jio code~ Temporary placeholder function for 90 degree turns.
 
   public void turn90Degrees(String direction) {
-    s_timer.reset();
-    s_timer.start();
+    rebootTimer();
     while (s_timer.get() < 1) {
       
       switch (direction) {
@@ -156,8 +157,7 @@ public class Robot extends TimedRobot {
  */
 
   public void turn90DegreesAdvanced(String direction) {
-    s_timer.reset();
-    s_timer.start();
+    rebootTimer();
     while (s_timer.get() < .5) {
       
       switch (direction) {
@@ -183,9 +183,7 @@ public class Robot extends TimedRobot {
   }
 
   public void turnArm(double time, double speed){
-
-    s_timer.reset();
-    s_timer.start();
+    rebootTimer();
     while (s_timer.get() < time){
       Arm.seatMotors.set(ControlMode.PercentOutput, speed);
     }
@@ -249,8 +247,7 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
     if (autoStatus == 0){
         System.out.println("Attempting to use Default Auto");
-      s_timer.reset();
-      s_timer.start();
+        rebootTimer();
         while(s_timer.get() < 2.5){
           Arm.seatMotors.set(ControlMode.PercentOutput, -0.9);
         }
@@ -300,8 +297,7 @@ public class Robot extends TimedRobot {
       case kLoopAuto: 
         if (autoStatus == 0) {
           
-          s_timer.reset();
-          s_timer.start();
+          rebootTimer();
           while (s_timer.get() < 3) { // program runs for 2 sec
             Arm.seatMotors.set(ControlMode.PercentOutput, 0.9); // arm will go down
           }
@@ -309,8 +305,7 @@ public class Robot extends TimedRobot {
           Extend.armExtend(0.5);
            System.out.println("Retracting... 1");
           Gripper.gripperRetract();
-          s_timer.reset();
-          s_timer.start();
+          rebootTimer();
           while (s_timer.get() < 3) { // program runs for 2 sec
             Arm.seatMotors.set(ControlMode.PercentOutput, -0.9); // arm will go down
           }
@@ -343,8 +338,7 @@ public class Robot extends TimedRobot {
         System.out.println("Going to attempt shootdock");
         if (autoStatus == 0) {
           Gripper.gripperBite("cube");
-          s_timer.reset();
-          s_timer.start();
+          rebootTimer();
             while(s_timer.get() < 3){
               Arm.seatMotors.set(ControlMode.PercentOutput, -0.9);
             }
@@ -363,8 +357,7 @@ public class Robot extends TimedRobot {
           if (autoStatus == 0) {
               System.out.println("eating food!!...3");
             Extend.armRetract(0.53);
-          s_timer.reset();
-          s_timer.start();
+          rebootTimer();
             while(s_timer.get() < 3){
               Arm.seatMotors.set(ControlMode.PercentOutput, 0.81);
             }
@@ -427,13 +420,10 @@ public class Robot extends TimedRobot {
       if(autoStatus == 0){
         autoStatus = 1;
         System.out.println("Attempting to drive in multiple.");
-
         driveInMultiple(10, 2);
         System.out.println("Attempting to stop.");
         Drive.driveTrain.tankDrive(0, 0);
-        System.out.println("Done");
-
-      
+        System.out.println("Done"); 
       }
       break;
 
