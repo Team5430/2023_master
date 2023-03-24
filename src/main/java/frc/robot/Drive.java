@@ -73,9 +73,9 @@ public class Drive implements Runnable{
      
         if (!auton) { //if not auton
   
-          if(Robot.joystickRight.getRawButton(2)){
-            this.setChezy(true);
-          } 
+//          if(Robot.joystickRight.getRawButton(2)){
+//            this.setChezy(true);
+//          } 
           if(Robot.joystickLeft.getRawButton(2)){
             this.setChezy(false);
           }
