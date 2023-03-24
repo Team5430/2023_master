@@ -52,7 +52,7 @@ public class Drive implements Runnable{
     final int units = 2048;
     public static double power1 = 0;
     public static double power2 = 0;
-    public boolean isChezy = true;
+    public boolean isChezy = false;
  
 //New constructors 
     public DriveStyle m_drivestyle = new DriveStyle();
@@ -82,9 +82,9 @@ public class Drive implements Runnable{
           
           if (isChezy) {
           //call chezy here
-          m_drivestyle.cheesyDrive(Robot.joystickLeft.getRawAxis(1),Robot.joystickRight.getRawAxis(2)); //Throttle on left vertical (1), wheel on right horizontal (2)
+//          m_drivestyle.cheesyDrive(Robot.joystickLeft.getRawAxis(1),Robot.joystickRight.getRawAxis(2)); //Throttle on left vertical (1), wheel on right horizontal (2)
           //the drivestyle subclass does its work, then we pull the values it just generated into the driveTrain to set leftright 
-          driveTrain.tankDrive(m_drivestyle.getLeftPower() * VariableSpeed.getMultiplier(),m_drivestyle.getRightPower() * VariableSpeed.getMultiplier());
+//          driveTrain.tankDrive(m_drivestyle.getLeftPower() * VariableSpeed.getMultiplier(),m_drivestyle.getRightPower() * VariableSpeed.getMultiplier());
           }
 
           else { //call original 5430 drive code
