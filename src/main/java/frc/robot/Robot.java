@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
 
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   NetworkTable table = inst.getTable("datatable");
-
+ 
   public static Timer s_timer = new Timer();
 
   
@@ -219,6 +219,7 @@ public class Robot extends TimedRobot {
     // updating the value from the encoder
     SmartDashboard.putNumber("Seat motor Values", Arm.position);
     SmartDashboard.putNumber("Multiplier", Drive.getMultiplier());
+    SmartDashboard.putNumber("Encoder Value", Drive.getEncoderValue());
 
   }
 
