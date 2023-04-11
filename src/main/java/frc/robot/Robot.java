@@ -30,10 +30,9 @@ public class Robot extends TimedRobot {
   // Threads
   Drive driveRef = new Drive();
   public Thread drive = new Thread(driveRef); // creates a thread for drivetrain
-  VariableSpeed safety = new VariableSpeed();
+
   Arm armRef = new Arm();
   public Thread arm = new Thread(armRef);
-  private Thread speedSafety = new Thread(safety);
  // Camera cameraRef = new Camera();
  // public Thread camera = new Thread(cameraRef);
   Extend extendRef = new Extend();
@@ -195,7 +194,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Thread starters
     drive.start();
-    speedSafety.start();
     arm.start();
  //   camera.start();
     gripper.start();
@@ -223,7 +221,7 @@ public class Robot extends TimedRobot {
 
     // updating the value from the encoder
     SmartDashboard.putNumber("Seat motor Values", Arm.position);
-    SmartDashboard.putNumber("Multiplier", VariableSpeed.getMultiplier());
+    SmartDashboard.putNumber("Multiplier", Drive.getMultiplier());
 
   }
 
